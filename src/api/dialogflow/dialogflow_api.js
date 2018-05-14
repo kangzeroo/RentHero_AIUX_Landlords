@@ -7,7 +7,7 @@ export const initDialogFlow = (ad_id) => {
   const p = new Promise((res, rej) => {
     axios.post(`${DIALOGFLOW_MS}/init_dialogflow`, { ad_id }, authHeaders())
       .then((data) => {
-        // console.log(data.data)
+        console.log(data.data)
         localStorage.setItem('session_id', data.data.session_id)
         console.log('session_id', data.data.session_id)
         res(data.data)
@@ -20,10 +20,11 @@ export const initDialogFlow = (ad_id) => {
 }
 
 export const sendMessageToDialogFlow = (message, session_id, ad_id) => {
+  console.log('sending message to dialogflow...')
   const p = new Promise((res, rej) => {
     axios.post(`${DIALOGFLOW_MS}/send_message`, { message, session_id, ad_id }, authHeaders())
       .then((data) => {
-        // console.log(data.data)
+        console.log(data.data)
         res(data.data)
       })
       .catch((err) => {
