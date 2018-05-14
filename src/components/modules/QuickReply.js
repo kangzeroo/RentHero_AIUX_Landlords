@@ -11,7 +11,7 @@ import {
 
 } from 'antd-mobile'
 import ImageCarousel from './ImageCarousel'
-
+import SubtitlesMachine from './SubtitlesMachine'
 
 class QuickReply extends Component {
 
@@ -32,28 +32,28 @@ class QuickReply extends Component {
       <div>
         OPTIONS:
         {
-          this.props.data.message.quick_replies.map((qr) => {
+          this.props.data.message.quick_replies.map((qr, i) => {
             if (qr.content_type === 'location') {
               return (
-                <div>
+                <div key={i} style={comStyles().quickreply}>
                   <h3>Send Location</h3>
                 </div>
               )
             } else if (qr.content_type === 'user_phone_number') {
               return (
-                <div>
+                <div key={i} style={comStyles().quickreply}>
                   <h3>Enter Phone Number</h3>
                 </div>
               )
             } else if (qr.content_type === 'user_email') {
               return (
-                <div>
+                <div key={i} style={comStyles().quickreply}>
                   <h3>Enter Email</h3>
                 </div>
               )
             } else if (qr.content_type === 'text') {
               return (
-                <div>
+                <div key={i} style={comStyles().quickreply}>
                   <h3>{qr.title}</h3>
                   {
                     qr.image_url
@@ -140,6 +140,10 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+    quickreply: {
+      backgroundColor: 'green',
+      margin: '10px auto',
+    }
 	}
 }
