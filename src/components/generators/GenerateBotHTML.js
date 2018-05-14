@@ -21,6 +21,10 @@ import QuickMessage from '../modules/QuickMessage'
 
 class GenerateBotHTML extends Component {
 
+  componentDidMount() {
+    console.log(this.props.data)
+  }
+
   generateHTML() {
     if (this.props.data.message.payload) {
       if (this.props.data.message.payload.attachment) {
@@ -41,7 +45,7 @@ class GenerateBotHTML extends Component {
             return (<FileDownloader src={this.props.data.message.payload.attachment.payload.url} />)
           }
         }
-      } else if (this.props.data.message.quick_replies) {
+      } else if (this.props.data.message.payload.quick_replies) {
         return (<QuickReply data={this.props.data} />)
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
@@ -54,7 +58,7 @@ class GenerateBotHTML extends Component {
               textAlign: 'left',
             }}
             containerStyles={{
-              width: '70%',
+              width: '100%',
               backgroundColor: 'aliceblue',
               padding: '10px',
               borderRadius: '10px',
@@ -71,6 +75,28 @@ class GenerateBotHTML extends Component {
         //   />
       // )
       }
+    } else if (this.props.data.message.text) {
+      return (
+        <SubtitlesMachine
+          speed={0.00000000000001}
+          text={this.props.data.message.text}
+          textStyles={{
+            // fontSize: '1.3rem',
+            color: 'black',
+            textAlign: 'left',
+          }}
+          containerStyles={{
+            width: '100%',
+            backgroundColor: 'aliceblue',
+            padding: '10px',
+            borderRadius: '10px',
+          }}
+          doneEvent={() => {
+            console.log('DONE')
+            this.props.onDone()
+          }}
+        />
+      )
     }
   }
 

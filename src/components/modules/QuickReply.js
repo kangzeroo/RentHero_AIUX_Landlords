@@ -78,12 +78,11 @@ class QuickReply extends Component {
           speed={0.4}
           text={this.props.data.message.text}
           textStyles={{
-            fontSize: '1.3rem',
-            color: 'white',
+            color: 'black',
             textAlign: 'left',
           }}
           containerStyles={{
-            width: '70%',
+            width: '100%',
           }}
           doneEvent={() => {
             console.log('WOOOO')
