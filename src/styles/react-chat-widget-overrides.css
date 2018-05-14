@@ -1,0 +1,51 @@
+#root {
+  font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+}
+
+.conversation-container > .header {
+  background-color: #2faded;
+}
+
+.conversation-container > .header > h4 {
+  color: white;
+  font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+  line-height: 1.1;
+}
+
+.launcher {
+  background-color: #2faded;
+}
+
+.open-launcher {
+  content: url("https://s3.amazonaws.com/rentburrow-static-assets/Icons/icons8-topic-48.png");
+  padding: 6px 0px 3px 0px;
+}
+
+.close-button {
+  background-color: rgba(0,0,0,0);
+}
+
+.message > .response {
+  background-color: #2faded;
+}
+
+.message > .client {
+  background-color: #007ebe;
+}
+
+.message-text {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+}
+
+p {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+}
+
+h5 {
+  font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+  color: #767B7D;
+}
