@@ -1,6 +1,18 @@
 # AI User Experience (AIUX by RentHero)
 This README.md file outlines best practices for building a custom chatbot UI/UX. Many of these conventions are inspired by Facebook Messenger's chatbot platform, including syntax and design principles. This is particularly useful for cross-platform integration.
 
+# UI Components
+A list of custom built UI components and what they do.
+- `<ConvoUI>` is the outer most component that houses the logic of relaying messages and responses
+- `<AIUX>` is the actual user interface for the chatfeed. It deals only with HTML components and does not handle any logic
+- `<GenerateBotHTML>` is a HOC that returns an appropriate HTML component according to the response message from Dialogflow
+- `<GenerateInput>` is a HOC that returns an appropriate input field (sometimes none) according to the response message from Dialogflow
+- `<UserResponse>` is a component that acts as a placeholder for user text input
+- `<InputMachine>` is a component that acts as the input field, but may also be a signature field, an image upload field...etc
+- `<SubtitlesMachine>` is a component that displays text as generative subtitles. It is used to add animation to the bot's responses.
+
+# Message Syntax
+
 ## Types of Messages
 Please use these 3 types of messages. See more at: https://developers.facebook.com/docs/messenger-platform/send-messages#message_types
 1. `RESPONSE` - Message is in response to a received message.
