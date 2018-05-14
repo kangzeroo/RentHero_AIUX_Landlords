@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import {
 
-} from 'antd-mobile'
+} from 'antd'
 import { initDialogFlow, sendMessageToDialogFlow } from '../../api/dialogflow/dialogflow_api'
 import { initializeFirebaseNotifications, addChatHistory } from '../../actions/firebase/firebase_cloud_messaging_actions'
 import { getMostRecentChat } from '../../api/fcm/firebase_cloud_messaging'
