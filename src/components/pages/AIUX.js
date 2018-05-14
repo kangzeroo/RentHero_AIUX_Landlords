@@ -29,8 +29,6 @@ class AIUX extends Component {
   }
 
   componentWillUpdate(prevProps, prevState) {
-    console.log(prevProps)
-    console.log(this.props)
     if (prevProps.htmlUserComp !== this.props.htmlUserComp) {
       this.htmlHistory.push({
         id: uuid.v4(),
@@ -47,13 +45,22 @@ class AIUX extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.scrollDown()
+  }
+
+  scrollDown() {
+    const objDiv = document.getElementById('botFeed');
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
 	render() {
 		return (
 			<div id='AIUX' style={comStyles().container}>
         <div style={comStyles().botProfile}>
           <h1 style={{ color: 'white' }}>{this.props.botName}</h1>
         </div>
-        <div style={comStyles().botFeed}>
+        <div id='botFeed' style={comStyles().botFeed}>
           {
             this.htmlHistory.map((_html) => {
               return (
@@ -123,6 +130,7 @@ const comStyles = () => {
       width: '100vw',
       height: '100vh',
       padding: '0px 20px 0px 20px',
+      margin: '10px',
       background: '#56CCF2',  /* fallback for old browsers */
 			background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
 			background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -148,6 +156,8 @@ const comStyles = () => {
       maxWidth: '100%',
       flexGrow: 16,
       backgroundColor: 'red',
+      maxHeight: '90vh',
+      overflowY: 'scroll',
     },
 	}
 }

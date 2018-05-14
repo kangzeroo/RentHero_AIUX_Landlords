@@ -11,17 +11,41 @@ import SubtitlesMachine from '../modules/SubtitlesMachine'
 import {
 
 } from 'antd-mobile'
-
+import ImageCarousel from '../modules/ImageCarousel'
+import VideoPlayer from '../modules/VideoPlayer'
+import PDFViewer from '../modules/PDFViewer'
+import FileDownloader from '../modules/FileDownloader'
+import AudioPlayer from '../modules/AudioPlayer'
+import QuickReply from '../modules/QuickReply'
 
 class GenerateBotHTML extends Component {
 
   generateHTML() {
-    console.log(this.props.data)
-    if (this.props.data.message) {
+    if (this.props.data.message.attachment) {
+      if (this.props.data.message.attachment.type === 'image') {
+        return (
+          <ImageCarousel imageUrl={this.props.data.message.attachment.payload.url} />
+        )
+      } else if (this.props.data.message.attachment.type === 'video') {
+        return (
+          <VideoPlayer videoUrl={this.props.data.message.attachment.payload.url} />
+        )
+      } else if (this.props.data.message.attachment.type === 'audio') {
+        return (<AudioPlayer audioUrl={this.props.data.message.attachment.payload.url} />)
+      } else if (this.props.data.message.attachment.type === 'file') {
+        if (this.props.data.message.attachment.payload.url.indexOf('.pdf') > -1) {
+          return (<PDFViewer src={this.props.data.message.attachment.payload.url} />)
+        } else {
+          return (<FileDownloader src={this.props.data.message.attachment.payload.url} />)
+        }
+      }
+    } else if (this.props.data.message.quick_replies) {
+      return (<QuickReply data={this.props.data} />)
+    } else if (this.props.data.message.text) {
       return (
         <SubtitlesMachine
         	speed={0.4}
-        	text={this.props.data.message}
+        	text={this.props.data.message.text}
         	textStyles={{
         		fontSize: '1.3rem',
         		color: 'white',
@@ -35,10 +59,6 @@ class GenerateBotHTML extends Component {
             this.props.onDone()
         	}}
         />
-      )
-    } else {
-      return (
-        <div>Unsupported Message Type</div>
       )
     }
   }
