@@ -7,6 +7,6 @@
 
 // STAGING
 export const DIALOGFLOW_MS = 'https://7e400996.ngrok.io'
-export const FCM_MS = 'https://f2b35613.ngrok.io'
+export const FCM_MS = 'https://b15059e9.ngrok.io'
 
 // PROD

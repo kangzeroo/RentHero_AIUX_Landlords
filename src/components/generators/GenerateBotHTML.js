@@ -18,6 +18,8 @@ import FileDownloader from '../modules/FileDownloader'
 import AudioPlayer from '../modules/AudioPlayer'
 import QuickReply from '../modules/QuickReply'
 import QuickMessage from '../modules/QuickMessage'
+import ImagesViewer from '../modules/ImagesViewer'
+import MapComponent from '../modules/MapComponent'
 
 class GenerateBotHTML extends Component {
 
@@ -26,6 +28,7 @@ class GenerateBotHTML extends Component {
   }
 
   generateHTML() {
+    console.log(this.props.data)
     if (this.props.data.message.payload) {
       if (this.props.data.message.payload.attachment) {
         if (this.props.data.message.payload.attachment.type === 'image') {
@@ -45,6 +48,13 @@ class GenerateBotHTML extends Component {
             return (<FileDownloader src={this.props.data.message.payload.attachment.payload.url} />)
           }
         }
+      } else if (this.props.data.message.payload.type === 'images') {
+        return (
+          <ImagesViewer
+            text={this.props.data.message.payload.text}
+            images={this.props.data.message.payload.images}
+          />
+        )
       } else if (this.props.data.message.payload.quick_replies) {
         return (<QuickReply data={this.props.data} />)
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
@@ -74,29 +84,14 @@ class GenerateBotHTML extends Component {
         //     text={this.props.data.message.text}
         //   />
       // )
+      } else if (this.props.data.message.payload.type === 'location') {
+        return (
+          <MapComponent
+            coords={this.props.data.message.payload.location}
+            address={this.props.data.message.payload.address}
+          />
+        )
       }
-    } else if (this.props.data.message.text) {
-      return (
-        <SubtitlesMachine
-          speed={0.00000000000001}
-          text={this.props.data.message.text}
-          textStyles={{
-            // fontSize: '1.3rem',
-            color: 'black',
-            textAlign: 'left',
-          }}
-          containerStyles={{
-            width: '100%',
-            backgroundColor: 'aliceblue',
-            padding: '10px',
-            borderRadius: '10px',
-          }}
-          doneEvent={() => {
-            console.log('DONE')
-            this.props.onDone()
-          }}
-        />
-      )
     }
   }
 

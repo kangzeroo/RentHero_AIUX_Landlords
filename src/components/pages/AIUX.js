@@ -112,13 +112,27 @@ class AIUX extends Component {
           <br /><br />
           {
             this.htmlHistory.map((_html) => {
+              console.log(_html)
               return (
                 <div key={_html.id} style={messageStyles(_html.sender).container}>
                   <div style={messageStyles(_html.sender).message}>
-                    <Avatar src={this.props.botIcon} shape='circle' size='large' />
+                    {
+                      _html.sender === 'user'
+                      ?
+                      null
+                      :
+                      <Avatar src={this.props.botIcon} shape='circle' size='large' />
+                    }
                     <div style={{ margin: '0px 10px' }}>
                       {_html.com}
                     </div>
+                    {
+                      _html.sender === 'user'
+                      ?
+                      <Avatar icon='user' shape='circle' size='large' />
+                      :
+                      null
+                    }
                   </div>
                 </div>
               )
@@ -233,6 +247,8 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
+      // height: '500px',
+      flexGrow: 10
     }
 	}
 }
@@ -243,7 +259,7 @@ const inputStyles = (flexGrow = 0) => {
       minWidth: '100%',
       maxWidth: '100%',
       flexGrow: flexGrow,
-      backgroundColor: 'blue',
+      // backgroundColor: 'blue',
     }
   }
 }
