@@ -8,7 +8,7 @@ Please use these 3 types of messages. See more at: https://developers.facebook.c
 3. MESSAGE_TAG - Message is non-promotional and is being sent outside the 24-hour standard messaging window with a message tag. The message must match the allowed use case for the tag.
 
 ## Basic Message Syntax
-`
+```
 curl -X POST -H "Content-Type: application/json" -d '{
   "recipient":{
     "id":"<PSID>"
@@ -17,4 +17,4 @@ curl -X POST -H "Content-Type: application/json" -d '{
     "text":"hello, world!"
   }
 }' "https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN>"
-`
+```
