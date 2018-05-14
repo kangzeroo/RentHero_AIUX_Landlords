@@ -10,17 +10,19 @@ import { withRouter } from 'react-router-dom'
 import SubtitlesMachine from '../modules/SubtitlesMachine'
 import {
 
-} from 'antd-mobile'
+} from 'antd'
 import ImageCarousel from '../modules/ImageCarousel'
 import VideoPlayer from '../modules/VideoPlayer'
 import PDFViewer from '../modules/PDFViewer'
 import FileDownloader from '../modules/FileDownloader'
 import AudioPlayer from '../modules/AudioPlayer'
 import QuickReply from '../modules/QuickReply'
+import QuickMessage from '../modules/QuickMessage'
 
 class GenerateBotHTML extends Component {
 
   generateHTML() {
+    console.log(this.props.data)
     if (this.props.data.message.attachment) {
       if (this.props.data.message.attachment.type === 'image') {
         return (
@@ -41,18 +43,21 @@ class GenerateBotHTML extends Component {
       }
     } else if (this.props.data.message.quick_replies) {
       return (<QuickReply data={this.props.data} />)
-    } else if (this.props.data.message.text) {
+    } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
       return (
         <SubtitlesMachine
-        	speed={0.4}
+        	speed={0.00000000000001}
         	text={this.props.data.message.text}
         	textStyles={{
-        		fontSize: '1.3rem',
-        		color: 'white',
+        		// fontSize: '1.3rem',
+        		color: 'black',
         		textAlign: 'left',
         	}}
         	containerStyles={{
         		width: '70%',
+            backgroundColor: 'aliceblue',
+            padding: '10px',
+            borderRadius: '10px',
         	}}
         	doneEvent={() => {
         		console.log('DONE')
@@ -60,6 +65,11 @@ class GenerateBotHTML extends Component {
         	}}
         />
       )
+      // return (
+      //   <QuickMessage
+      //     text={this.props.data.message.text}
+      //   />
+      // )
     }
   }
 

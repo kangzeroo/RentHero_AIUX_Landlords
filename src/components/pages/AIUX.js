@@ -9,8 +9,12 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
-} from 'antd-mobile'
+  Rate,
+  Avatar,
+  Input,
+  List,
+  Button,
+} from 'antd'
 
 
 class AIUX extends Component {
@@ -18,30 +22,40 @@ class AIUX extends Component {
   constructor() {
     super()
     this.htmlHistory = []
+    this.state = {
+      input_style: 'input',
+    }
   }
 
   componentWillMount() {
-    this.htmlHistory.push({
-      id: uuid.v4(),
-      sender: 'ai',
-      com: this.props.htmlBotComp
-    })
+    if (this.props.htmlBotComp) {
+      this.htmlHistory.push({
+        id: uuid.v4(),
+        sender: 'ai',
+        com: this.props.htmlBotComp
+      })
+    }
   }
 
   componentWillUpdate(prevProps, prevState) {
     if (prevProps.htmlUserComp !== this.props.htmlUserComp) {
-      this.htmlHistory.push({
-        id: uuid.v4(),
-        sender: 'user',
-        com: prevProps.htmlUserComp
-      })
+      if (prevProps.htmlUserComp) {
+        // ensure com is not null
+        this.htmlHistory.push({
+          id: uuid.v4(),
+          sender: 'user',
+          com: prevProps.htmlUserComp
+        })
+      }
     }
     if (prevProps.htmlBotComp !== this.props.htmlBotComp) {
-      this.htmlHistory.push({
-        id: uuid.v4(),
-        sender: 'ai',
-        com: prevProps.htmlBotComp
-      })
+      if (prevProps.htmlBotComp) {
+        this.htmlHistory.push({
+          id: uuid.v4(),
+          sender: 'ai',
+          com: prevProps.htmlBotComp
+        })
+      }
     }
   }
 
@@ -54,30 +68,75 @@ class AIUX extends Component {
     objDiv.scrollTop = objDiv.scrollHeight;
   }
 
+  renderInput() {
+    if (this.state.input_type === 'input') {
+      return (
+        <Input
+
+        />
+      )
+    } else if (this.state.input_style === 'selection') {
+      return (
+        <List>
+          <Button>Selection 1</Button>
+          <Button>Selection 2</Button>
+          <Button>Slection 3</Button>
+        </List>
+      )
+    }
+  }
+
 	render() {
 		return (
 			<div id='AIUX' style={comStyles().container}>
-        <div style={comStyles().botProfile}>
+        <div style={comStyles().header}>
           <h1 style={{ color: 'white' }}>{this.props.botName}</h1>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
+          <br /><br /><br />
+          <div style={comStyles().botProfile}>
+            <img
+              src={this.props.botIcon}
+              alt='Avatar'
+              style={{
+                borderRadius: '50%',
+                height: '150px',
+                width: '150px',
+              }}
+            />
+            <br />
+            <div style={{ fontWeight: 'bold', fontSize: '1.2REM' }}>{ this.props.botName }</div>
+            <Rate value={5} />
+            <p>Intelligent Leasing Assistant</p>
+          </div>
+          <br /><br />
           {
             this.htmlHistory.map((_html) => {
               return (
                 <div key={_html.id} style={messageStyles(_html.sender).container}>
                   <div style={messageStyles(_html.sender).message}>
-                    {_html.com}
+                    <Avatar src={this.props.botIcon} shape='circle' size='large' />
+                    <div style={{ margin: '0px 10px' }}>
+                      {_html.com}
+                    </div>
                   </div>
                 </div>
               )
             })
           }
         </div>
-        <div style={inputStyles(3).botInput}>
-          {
-            this.props.htmlInput
-          }
-        </div>
+        {
+
+          <div style={inputStyles(3).botInput}>
+            {
+              this.props.htmlInput
+            }
+          </div>
+
+        }
+        {
+          // this.renderInput()
+        }
 			</div>
 		)
 	}
@@ -95,8 +154,8 @@ AIUX.propTypes = {
 
 // for all optional props, define a default value
 AIUX.defaultProps = {
-  botIcon: 'https://academist-app-production.s3.amazonaws.com/uploads/user/profile_image/1744/default_user_icon.png',
-  botName: 'RentHero AI',
+  botIcon: 'https://i2-prod.mirror.co.uk/incoming/article10263400.ece/ALTERNATES/s1200/PROD-Kim-Jong-Un.jpg',
+  botName: 'Kim',
   htmlBotComp: null,
   htmlUserComp: null,
   htmlInput: null,
@@ -127,25 +186,30 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100vw',
-      height: '100vh',
-      padding: '0px 20px 0px 20px',
-      margin: '10px',
-      background: '#56CCF2',  /* fallback for old browsers */
-			background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
-			background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-		},
-    botProfile: {
+      width: '100%',
+      height: '100%',
+      // padding: '0px 20px 0px 20px',
+      // margin: '10px',
+      // background: '#56CCF2',  /* fallback for old browsers */
+			// background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
+			// background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      // background: '#56CCF2',  /* fallback for old browsers */
+      // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
+      // background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    },
+    header: {
       display: 'flex',
-      flexDirection: 'column',
+      // flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       color: 'white',
       minHeight: '30px',
       minWidth: '100%',
       maxWidth: '100%',
-      flexGrow: 1,
-      backgroundColor: 'green',
+      // flexGrow: 1,
+      background: '#56CCF2',  /* fallback for old browsers */
+      background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
+      background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     },
     botFeed: {
       display: 'flex',
@@ -155,10 +219,21 @@ const comStyles = () => {
       minWidth: '100%',
       maxWidth: '100%',
       flexGrow: 16,
-      backgroundColor: 'red',
+      backgroundColor: 'white',
       maxHeight: '90vh',
       overflowY: 'scroll',
+      // background: '#56CCF2',  /* fallback for old browsers */
+      // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
+      // background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     },
+    botProfile: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+    }
 	}
 }
 
@@ -183,7 +258,10 @@ const messageStyles = (sender) => {
       width: '100%',
     },
     message: {
-      float: floatDirection
+      float: floatDirection,
+      display: 'flex',
+      flexDirection: 'row',
+      margin: '10px',
     }
   }
 }

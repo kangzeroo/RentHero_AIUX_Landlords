@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import {
 
-} from 'antd-mobile'
+} from 'antd'
 import { initDialogFlow, sendMessageToDialogFlow } from '../../api/dialogflow/dialogflow_api'
 import { initializeFirebaseNotifications, addChatHistory } from '../../actions/firebase/firebase_cloud_messaging_actions'
 import { getMostRecentChat } from '../../api/fcm/firebase_cloud_messaging'
@@ -64,105 +64,105 @@ class ConvoUI extends Component {
 	}
 
 	test() {
-		this.setState({
-			nextHtmlBotComp: (<GenerateBotHTML data={{
-				"message":{
-			    "attachment":{
-			      "type":"image",
-			      "payload":{
-			        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-			        "is_reusable":true
-			      }
-			    }
-			  }
-			}} />)
-		})
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-				    "attachment":{
-				      "type":"video",
-				      "payload":{
-				        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
-				        "is_reusable":true
-				      }
-				    }
-				  }
-				}} />)
-			})
-		}, 1000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-				    "attachment":{
-				      "type":"file",
-				      "payload":{
-				        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
-				        "is_reusable":true
-				      }
-				    }
-				  }
-				}} />)
-			})
-		}, 2000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-				    "attachment":{
-				      "type":"file",
-				      "payload":{
-				        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-				        "is_reusable":true
-				      }
-				    }
-				  }
-				}} />)
-			})
-		}, 3000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-				    "attachment":{
-				      "type":"audio",
-				      "payload":{
-				        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
-				        "is_reusable":true
-				      }
-				    }
-				  }
-				}} />)
-			})
-		}, 4000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"text": "Here is a quick reply! Please select an option.",
-				    "quick_replies":[
-				      {
-				        "content_type":"text",
-				        "title":"Option 1",
-				        "payload":"<POSTBACK_PAYLOAD>",
-				        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
-				      },
-				      {
-				        "content_type":"user_phone_number"
-				      },
-				      {
-				        "content_type":"user_email"
-				      },
-				      {
-				        "content_type":"location"
-				      },
-				    ]
-				  }
-				}} />)
-			})
-		}, 5000)
+		// this.setState({
+		// 	nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 		"message":{
+		// 	    "attachment":{
+		// 	      "type":"image",
+		// 	      "payload":{
+		// 	        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+		// 	        "is_reusable":true
+		// 	      }
+		// 	    }
+		// 	  }
+		// 	}} />)
+		// })
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 			"message":{
+		// 		    "attachment":{
+		// 		      "type":"video",
+		// 		      "payload":{
+		// 		        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
+		// 		        "is_reusable":true
+		// 		      }
+		// 		    }
+		// 		  }
+		// 		}} />)
+		// 	})
+		// }, 1000)
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 			"message":{
+		// 		    "attachment":{
+		// 		      "type":"file",
+		// 		      "payload":{
+		// 		        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
+		// 		        "is_reusable":true
+		// 		      }
+		// 		    }
+		// 		  }
+		// 		}} />)
+		// 	})
+		// }, 2000)
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 			"message":{
+		// 		    "attachment":{
+		// 		      "type":"file",
+		// 		      "payload":{
+		// 		        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+		// 		        "is_reusable":true
+		// 		      }
+		// 		    }
+		// 		  }
+		// 		}} />)
+		// 	})
+		// }, 3000)
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 			"message":{
+		// 		    "attachment":{
+		// 		      "type":"audio",
+		// 		      "payload":{
+		// 		        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
+		// 		        "is_reusable":true
+		// 		      }
+		// 		    }
+		// 		  }
+		// 		}} />)
+		// 	})
+		// }, 4000)
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+		// 			"message":{
+		// 				"text": "Here is a quick reply! Please select an option.",
+		// 		    "quick_replies":[
+		// 		      {
+		// 		        "content_type":"text",
+		// 		        "title":"Option 1",
+		// 		        "payload":"<POSTBACK_PAYLOAD>",
+		// 		        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
+		// 		      },
+		// 		      {
+		// 		        "content_type":"user_phone_number"
+		// 		      },
+		// 		      {
+		// 		        "content_type":"user_email"
+		// 		      },
+		// 		      {
+		// 		        "content_type":"location"
+		// 		      },
+		// 		    ]
+		// 		  }
+		// 		}} />)
+		// 	})
+		// }, 5000)
 	}
 
 	initiateDialogFlow() {
