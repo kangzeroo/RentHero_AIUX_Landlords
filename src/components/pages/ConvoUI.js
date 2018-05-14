@@ -184,7 +184,7 @@ class ConvoUI extends Component {
 				this.setState({
 					session_id: msg.session_id,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
-					nextHtmlInput: (<GenerateInput onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 			}).catch((err) => {
 				console.log(err)
@@ -201,7 +201,7 @@ class ConvoUI extends Component {
 			this.setState({
 				session_id: msg.session_id,
 				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
-				nextHtmlInput: (<GenerateInput onSubmit={(t) => this.submitted(t)} />),
+				nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 			})
 		})
 	}
@@ -217,13 +217,16 @@ class ConvoUI extends Component {
 
 	submitted(text) {
 		console.log(text)
+		this.setState({
+			nextHtmlUserComp: (<UserResponse text={text} />),
+		})
 		// Promise.resolve() represents some API call
 		sendMessageToDialogFlow(text, this.state.session_id, this.props.ad_id)
 			.then((msg) => {
 				this.feedInObserver.next({
-					nextHtmlUserComp: (<UserResponse text={text} />),
+					nextHtmlUserComp: null,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} />),
-					nextHtmlInput: (<GenerateInput data={msg} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 			})
 			.catch((err) => {
