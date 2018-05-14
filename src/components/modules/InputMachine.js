@@ -9,8 +9,9 @@ import Rx from 'rxjs'
 import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import {
-
-} from 'antd-mobile'
+  Input,
+  message,
+} from 'antd'
 
 
 class InputMachine extends Component {
@@ -23,24 +24,40 @@ class InputMachine extends Component {
     }
   }
 
-  componentDidMount() {
-    document.getElementById(`input_field_${this.state.input_id}`).addEventListener('keyup', (e) => {
-      if (e.keyCode === 13) {
-        this.submitText()
-      }
-    })
-  }
+  // componentDidMount() {
+  //   document.getElementById(`input_field_${this.state.input_id}`).addEventListener('keyup', (e) => {
+  //     if (e.keyCode === 13) {
+  //       this.submitText()
+  //     }
+  //   })
+  // }
 
   submitText() {
-    this.props.onSubmit(this.state.input_text)
-    this.setState({ input_text: '' })
+    if (this.state.input_text.length > 0) {
+      this.props.onSubmit(this.state.input_text)
+      this.setState({ input_text: '' })
+    } else {
+      message.error('Please input something...')
+    }
   }
+
+  // 				<input id={`input_field_${this.state.input_id}`} type='text' value={this.state.input_text} onChange={(e) => this.setState({ input_text: e.target.value })} />
+  //         <button onClick={() => this.submitText()}>Send</button>
+
 
 	render() {
 		return (
 			<div id='InputMachine' style={comStyles().container}>
-				<input id={`input_field_${this.state.input_id}`} type='text' value={this.state.input_text} onChange={(e) => this.setState({ input_text: e.target.value })} />
-        <button onClick={() => this.submitText()}>Send</button>
+        <Input
+          id={`input_field_${this.state.input_id}`}
+          value={this.state.input_text}
+          onChange={(e) => this.setState({
+            input_text: e.target.value
+          })}
+          placeholder='Send Message'
+          onPressEnter={() => this.submitText()}
+          size='large'
+        />
 			</div>
 		)
 	}

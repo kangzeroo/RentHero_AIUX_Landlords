@@ -57,8 +57,8 @@ export default withRouter(
 const comStyles = () => {
 	return {
 		container: {
-      // backgroundColor: 'aliceblue',
-      color: 'white',
+      backgroundColor: 'aliceblue',
+      color: 'black',
       padding: '10px',
       borderRadius: '10px',
 		}
