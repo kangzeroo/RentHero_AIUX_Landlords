@@ -73,6 +73,35 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }' "https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN>"
 ```
 
+## Message Buttons
+Allow buttons to appear in the chat. There are 9 types of buttons that FB Messenger uses, but we only care about HTML buttons. To learn more about FB's button types, see: https://developers.facebook.com/docs/messenger-platform/send-messages/buttons
+```
+curl -X POST -H "Content-Type: application/json" -d '{
+  "recipient":{
+    "id":"<PSID>"
+  },
+  "message":{
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"Try the URL button!",
+        "buttons":[
+          {
+            "type":"web_url",
+            "url":"https://www.messenger.com/",
+            "title":"URL Button",
+            "webview_height_ratio": "full",
+            "messenger_extensions": "false",  
+            "fallback_url": "https://www.facebook.com/"
+          }
+        ]
+      }
+    }
+  }
+}' "https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN>"
+```
+
 ## Message Tags
 Used when you are sending out a message that is considered an update or tag. Each tag indicates the purpose of the unsolicitated message, and must comply to standards. See more at: https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags
 ```
@@ -88,12 +117,65 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }' "https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN>"  
 ```
 
+## Persistent Menus
+Use persistent menus as a way to always show the user what is possible with your chatbot. They are great for fallbacks. Below is a nest persistent menu. See more at: https://developers.facebook.com/docs/messenger-platform/send-messages/persistent-menu
+```
+{
+  "persistent_menu":[
+    {
+      "locale":"default",
+      "composer_input_disabled": true,
+      "call_to_actions":[
+        {
+          "title":"My Account",
+          "type":"nested",
+          "call_to_actions":[
+            {
+              "title":"Pay Bill",
+              "type":"postback",
+              "payload":"PAYBILL_PAYLOAD"
+            },
+            {
+              "title":"History",
+              "type":"postback",
+              "payload":"HISTORY_PAYLOAD"
+            },
+            {
+              "title":"Contact Info",
+              "type":"postback",
+              "payload":"CONTACT_INFO_PAYLOAD"
+            }
+          ]
+        },
+        {
+          "type":"web_url",
+          "title":"Latest News",
+          "url":"http://www.messenger.com/",
+          "webview_height_ratio":"full"
+        }
+      ]
+    },
+    {
+      "locale":"zh_CN",
+      "composer_input_disabled":false,
+      "call_to_actions":[
+        {
+          "title":"Pay Bill",
+          "type":"postback",
+          "payload":"PAYBILL_PAYLOAD"
+        }
+      ]    
+    }
+  ]
+}
+```
+
 ## Handover Protocols
 Use handovers when you want to hand over control of the convo from one bot to another bot, or to a human. We do not go into depth on handovers yet. For more info, see: https://developers.facebook.com/docs/messenger-platform/handover-protocol
 
 ## Message Templates
 Think of these almost as rich media. They are often interactive webviews (at least FB Messenger's solution to webviews without HTML). See more at: https://developers.facebook.com/docs/messenger-platform/send-messages/templates
 
-![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/21201919_1215144078631552_6152307842817720320_n.png?_nc_cat=0&oh=e20277a7863b6d9c80c4965070c1c9be&oe=5B96BE6A "Example 1")
-![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/22880422_1740199342956641_1916832982102966272_n.png?_nc_cat=0&oh=6a580f8bf3adad4460955a5353c5853e&oe=5B8E0C3C "Example 2")
-![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/23666967_188506161716866_2869776016224550912_n.png?_nc_cat=0&oh=621453ea0f342604812b7d0fd084770f&oe=5B80D0E5 "Example 3")
+![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/21201919_1215144078631552_6152307842817720320_n.png?_nc_cat=0&oh=e20277a7863b6d9c80c4965070c1c9be&oe=5B96BE6A | width=150)
+![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/22880422_1740199342956641_1916832982102966272_n.png?_nc_cat=0&oh=6a580f8bf3adad4460955a5353c5853e&oe=5B8E0C3C | width=150)
+![alt text](https://scontent.fykz1-1.fna.fbcdn.net/v/t39.2365-6/23666967_188506161716866_2869776016224550912_n.png?_nc_cat=0&oh=621453ea0f342604812b7d0fd084770f&oe=5B80D0E5 | width=150)
