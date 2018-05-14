@@ -60,20 +60,22 @@ class ConvoUI extends Component {
 				console.log('OBSERVABLE COMPLETE')
 			}
 		})
-		this.test()
+		// this.test()
 	}
 
 	test() {
 		this.setState({
 			nextHtmlBotComp: (<GenerateBotHTML data={{
 				"message":{
-			    "attachment":{
-			      "type":"image",
-			      "payload":{
-			        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-			        "is_reusable":true
-			      }
-			    }
+					"payload": {
+				    "attachment":{
+				      "type":"image",
+				      "payload":{
+				        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+				        "is_reusable":true
+				      }
+				    }
+					}
 			  }
 			}} />)
 		})
@@ -81,13 +83,15 @@ class ConvoUI extends Component {
 			this.setState({
 				nextHtmlBotComp: (<GenerateBotHTML data={{
 					"message":{
-				    "attachment":{
-				      "type":"video",
-				      "payload":{
-				        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
-				        "is_reusable":true
-				      }
-				    }
+						"payload": {
+					    "attachment":{
+					      "type":"video",
+					      "payload":{
+					        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
+					        "is_reusable":true
+					      }
+					    }
+						}
 				  }
 				}} />)
 			})
@@ -96,13 +100,15 @@ class ConvoUI extends Component {
 			this.setState({
 				nextHtmlBotComp: (<GenerateBotHTML data={{
 					"message":{
-				    "attachment":{
-				      "type":"file",
-				      "payload":{
-				        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
-				        "is_reusable":true
-				      }
-				    }
+						"payload": {
+					    "attachment":{
+					      "type":"file",
+					      "payload":{
+					        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
+					        "is_reusable":true
+					      }
+					    }
+						}
 				  }
 				}} />)
 			})
@@ -111,13 +117,15 @@ class ConvoUI extends Component {
 			this.setState({
 				nextHtmlBotComp: (<GenerateBotHTML data={{
 					"message":{
-				    "attachment":{
-				      "type":"file",
-				      "payload":{
-				        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-				        "is_reusable":true
-				      }
-				    }
+						"payload": {
+					    "attachment":{
+					      "type":"file",
+					      "payload":{
+					        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+					        "is_reusable":true
+					      }
+					    }
+						}
 				  }
 				}} />)
 			})
@@ -126,13 +134,15 @@ class ConvoUI extends Component {
 			this.setState({
 				nextHtmlBotComp: (<GenerateBotHTML data={{
 					"message":{
-				    "attachment":{
-				      "type":"audio",
-				      "payload":{
-				        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
-				        "is_reusable":true
-				      }
-				    }
+						"payload": {
+					    "attachment":{
+					      "type":"audio",
+					      "payload":{
+					        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
+					        "is_reusable":true
+					      }
+					    }
+						}
 				  }
 				}} />)
 			})
@@ -142,23 +152,25 @@ class ConvoUI extends Component {
 				nextHtmlBotComp: (<GenerateBotHTML data={{
 					"message":{
 						"text": "Here is a quick reply! Please select an option.",
-				    "quick_replies":[
-				      {
-				        "content_type":"text",
-				        "title":"Option 1",
-				        "payload":"<POSTBACK_PAYLOAD>",
-				        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
-				      },
-				      {
-				        "content_type":"user_phone_number"
-				      },
-				      {
-				        "content_type":"user_email"
-				      },
-				      {
-				        "content_type":"location"
-				      },
-				    ]
+						"payload": {
+					    "quick_replies":[
+					      {
+					        "content_type":"text",
+					        "title":"Option 1",
+					        "payload":"<POSTBACK_PAYLOAD>",
+					        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
+					      },
+					      {
+					        "content_type":"user_phone_number"
+					      },
+					      {
+					        "content_type":"user_email"
+					      },
+					      {
+					        "content_type":"location"
+					      },
+					    ]
+						}
 				  }
 				}} />)
 			})
@@ -171,7 +183,7 @@ class ConvoUI extends Component {
 				this.props.initializeFirebaseNotifications()
 				this.setState({
 					session_id: msg.session_id,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ ...msg, message: { text: msg.message } }} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
 					nextHtmlInput: (<GenerateInput onSubmit={(t) => this.submitted(t)} />),
 				})
 			}).catch((err) => {
@@ -188,7 +200,7 @@ class ConvoUI extends Component {
 			}
 			this.setState({
 				session_id: msg.session_id,
-				nextHtmlBotComp: (<GenerateBotHTML data={{ ...msg, message: { text: msg.message } }} />),
+				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
 				nextHtmlInput: (<GenerateInput onSubmit={(t) => this.submitted(t)} />),
 			})
 		})
@@ -210,7 +222,7 @@ class ConvoUI extends Component {
 			.then((msg) => {
 				this.feedInObserver.next({
 					nextHtmlUserComp: (<UserResponse text={text} />),
-					nextHtmlBotComp: (<GenerateBotHTML data={{ ...msg, message: { text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} />),
 					nextHtmlInput: (<GenerateInput data={msg} onSubmit={(t) => this.submitted(t)} />),
 				})
 			})

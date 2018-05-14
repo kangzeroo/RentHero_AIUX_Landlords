@@ -21,43 +21,64 @@ import QuickReply from '../modules/QuickReply'
 class GenerateBotHTML extends Component {
 
   generateHTML() {
-    if (this.props.data.message.attachment) {
-      if (this.props.data.message.attachment.type === 'image') {
-        return (
-          <ImageCarousel imageUrl={this.props.data.message.attachment.payload.url} />
-        )
-      } else if (this.props.data.message.attachment.type === 'video') {
-        return (
-          <VideoPlayer videoUrl={this.props.data.message.attachment.payload.url} />
-        )
-      } else if (this.props.data.message.attachment.type === 'audio') {
-        return (<AudioPlayer audioUrl={this.props.data.message.attachment.payload.url} />)
-      } else if (this.props.data.message.attachment.type === 'file') {
-        if (this.props.data.message.attachment.payload.url.indexOf('.pdf') > -1) {
-          return (<PDFViewer src={this.props.data.message.attachment.payload.url} />)
-        } else {
-          return (<FileDownloader src={this.props.data.message.attachment.payload.url} />)
+    if (this.props.data.message.payload) {
+      if (this.props.data.message.payload.attachment) {
+        if (this.props.data.message.payload.attachment.type === 'image') {
+          return (
+            <ImageCarousel imageUrl={this.props.data.message.payload.attachment.payload.url} />
+          )
+        } else if (this.props.data.message.payload.attachment.type === 'video') {
+          return (
+            <VideoPlayer videoUrl={this.props.data.message.payload.attachment.payload.url} />
+          )
+        } else if (this.props.data.message.payload.attachment.type === 'audio') {
+          return (<AudioPlayer audioUrl={this.props.data.message.payload.attachment.payload.url} />)
+        } else if (this.props.data.message.payload.attachment.type === 'file') {
+          if (this.props.data.message.payload.attachment.payload.url.indexOf('.pdf') > -1) {
+            return (<PDFViewer src={this.props.data.message.payload.attachment.payload.url} />)
+          } else {
+            return (<FileDownloader src={this.props.data.message.payload.attachment.payload.url} />)
+          }
         }
+      } else if (this.props.data.message.payload.quick_replies) {
+        return (<QuickReply data={this.props.data} />)
+      } else if (this.props.data.message.text) {
+        return (
+          <SubtitlesMachine
+          	speed={0.4}
+          	text={this.props.data.message.text}
+          	textStyles={{
+          		fontSize: '1.3rem',
+          		color: 'white',
+          		textAlign: 'left',
+          	}}
+          	containerStyles={{
+          		width: '70%',
+          	}}
+          	doneEvent={() => {
+          		console.log('DONE')
+              this.props.onDone()
+          	}}
+          />
+        )
       }
-    } else if (this.props.data.message.quick_replies) {
-      return (<QuickReply data={this.props.data} />)
     } else if (this.props.data.message.text) {
       return (
         <SubtitlesMachine
-        	speed={0.4}
-        	text={this.props.data.message.text}
-        	textStyles={{
-        		fontSize: '1.3rem',
-        		color: 'white',
-        		textAlign: 'left',
-        	}}
-        	containerStyles={{
-        		width: '70%',
-        	}}
-        	doneEvent={() => {
-        		console.log('DONE')
+          speed={0.4}
+          text={this.props.data.message.text}
+          textStyles={{
+            fontSize: '1.3rem',
+            color: 'white',
+            textAlign: 'left',
+          }}
+          containerStyles={{
+            width: '70%',
+          }}
+          doneEvent={() => {
+            console.log('DONE')
             this.props.onDone()
-        	}}
+          }}
         />
       )
     }

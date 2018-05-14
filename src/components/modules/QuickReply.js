@@ -32,7 +32,7 @@ class QuickReply extends Component {
       <div>
         OPTIONS:
         {
-          this.props.data.message.quick_replies.map((qr, i) => {
+          this.props.data.message.payload.quick_replies.map((qr, i) => {
             if (qr.content_type === 'location') {
               return (
                 <div key={i} style={comStyles().quickreply}>
