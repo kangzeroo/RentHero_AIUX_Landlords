@@ -71,6 +71,7 @@ class GenerateBotHTML extends Component {
         //   />
       // )
       }
+    }
   }
 
 	render() {
