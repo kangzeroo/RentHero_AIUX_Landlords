@@ -17,7 +17,8 @@ import 'antd-mobile/dist/antd-mobile.css'
 import 'antd/dist/antd.css';
 import AppRootMechanics from './AppRootMechanics'
 import ConvoUI from './pages/ConvoUI'
-import AIUX from './pages/AIUX'
+import Passwordless from './auth/Passwordless'
+import LoginPasswordless from './auth/LoginPasswordless'
 
 class AppRoot extends Component {
 
@@ -26,7 +27,8 @@ class AppRoot extends Component {
       <Switch>
 
         <Route exact path='/' render={ConvoUI} />
-        <Route exact path='/sandbox' render={AIUX} />
+        <Route exact path='/login' render={LoginPasswordless} />
+        <Route exact path='/passwordless' render={Passwordless} />
         <Route path='*' render={ConvoUI} />
 
       </Switch>

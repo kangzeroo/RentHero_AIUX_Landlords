@@ -152,6 +152,10 @@ class AIUX extends Component {
               }
             })
           }
+          <div style={comStyles().userIcons}>
+            <Avatar src={this.props.botIcon} shape='circle' size='large' />
+            <Avatar icon='user' shape='circle' size='large' />
+          </div>
         </div>
         {
 
@@ -263,6 +267,14 @@ const comStyles = () => {
       width: '100%',
       // height: '500px',
       flexGrow: 10
+    },
+    userIcons: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'space-between',
+      width: '100%',
+      padding: '5px',
     }
 	}
 }
