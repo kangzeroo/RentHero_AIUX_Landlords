@@ -8,8 +8,11 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
-} from 'antd-mobile'
+  Input,
+  List,
+  Button,
+  Divider,
+} from 'antd'
 import ImageCarousel from './ImageCarousel'
 import SubtitlesMachine from './SubtitlesMachine'
 
@@ -30,7 +33,6 @@ class QuickReply extends Component {
   renderQuickReplyOptions() {
     return (
       <div>
-        OPTIONS:
         {
           this.props.data.message.payload.quick_replies.map((qr, i) => {
             if (qr.content_type === 'location') {
@@ -51,6 +53,15 @@ class QuickReply extends Component {
                   <h3>Enter Email</h3>
                 </div>
               )
+            } else if (qr.content_type === 'friendly_name') {
+              return (
+                <div key={i} style={comStyles().quickreply}>
+                  <p>{ qr.title }</p>
+                  <Input
+                    placeholder='Enter Friendly Name'
+                  />
+                </div>
+              )
             } else if (qr.content_type === 'text') {
               return (
                 <div key={i} style={comStyles().quickreply}>
@@ -62,6 +73,17 @@ class QuickReply extends Component {
                     :
                     null
                   }
+                </div>
+              )
+            } else if (qr.content_type === 'purpose_selection') {
+              return (
+                <div key={i} style={comStyles().quickreply}>
+                  <p>{ qr.title }</p>
+                  <List>
+                    <Button style={comStyles().selectButton} type='default' size='large'>I have a question about the property</Button>
+                    <Button style={comStyles().selectButton} type='default' size='large'>I want to book a tour!</Button>
+                    <Button style={comStyles().selectButton} type='default' size='large'>Other</Button>
+                  </List>
                 </div>
               )
             }
@@ -83,6 +105,10 @@ class QuickReply extends Component {
           }}
           containerStyles={{
             width: '100%',
+            backgroundColor: 'aliceblue',
+            borderRadius: '10px',
+            padding: '10px',
+            margin: '5px 0px',
           }}
           doneEvent={() => {
             console.log('WOOOO')
@@ -141,8 +167,13 @@ const comStyles = () => {
       flexDirection: 'column',
 		},
     quickreply: {
-      backgroundColor: 'green',
-      margin: '10px auto',
+      backgroundColor: 'aliceblue',
+      padding: '10px',
+      borderRadius: '10px',
+      margin: '5px 0px'
+    },
+    selectButton: {
+      width: '100%',
     }
 	}
 }
