@@ -119,28 +119,18 @@ class AIUX extends Component {
               return (
                 <div key={_html.id} style={messageStyles(_html.sender).container}>
                   <div style={messageStyles(_html.sender).message}>
-                    {
-                      _html.sender === 'user'
-                      ?
-                      null
-                      :
-                      <Avatar src={this.props.botIcon} shape='circle' size='large' />
-                    }
                     <div style={{ margin: '0px 10px' }}>
                       {_html.com}
                     </div>
-                    {
-                      _html.sender === 'user'
-                      ?
-                      <Avatar icon='user' shape='circle' size='large' />
-                      :
-                      null
-                    }
                   </div>
                 </div>
               )
             })
           }
+          <div style={comStyles().userIcons}>
+            <Avatar src={this.props.botIcon} shape='circle' size='large' />
+            <Avatar icon='user' shape='circle' size='large' />
+          </div>
         </div>
         {
 
@@ -252,6 +242,14 @@ const comStyles = () => {
       width: '100%',
       // height: '500px',
       flexGrow: 10
+    },
+    userIcons: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'space-between',
+      width: '100%',
+      padding: '5px',
     }
 	}
 }

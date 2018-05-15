@@ -40,8 +40,10 @@
     "webpack-webfont": "0.0.1-alpha.7"
   },
   "dependencies": {
+    "amazon-cognito-js": "^1.1.0",
     "antd": "3.4.3",
     "antd-mobile": "2.1.8",
+    "auth0-lock": "^11.6.1",
     "aws-sdk": "2.80.0",
     "axios": "0.16.2",
     "browser-locale": "1.0.2",
