@@ -20,6 +20,7 @@ import QuickReply from '../modules/QuickReply'
 import QuickMessage from '../modules/QuickMessage'
 import ImagesViewer from '../modules/ImagesViewer'
 import MapComponent from '../modules/MapComponent'
+import LocationsComponent from '../modules/LocationsComponent'
 
 class GenerateBotHTML extends Component {
 
@@ -86,6 +87,18 @@ class GenerateBotHTML extends Component {
             coords={this.props.data.message.payload.location}
             address={this.props.data.message.payload.address}
           />
+        )
+      } else if (this.props.data.message.payload.type === 'locations') {
+        return (
+          <div>
+            <QuickMessage
+              text={this.props.data.message.payload.text}
+            />
+            <br />
+            <LocationsComponent
+              listOfResults={this.props.data.message.payload.results}
+            />
+          </div>
         )
       }
     } else {
