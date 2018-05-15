@@ -29,6 +29,7 @@ class AIUX extends Component {
 
   componentWillMount() {
     if (this.props.htmlBotComp) {
+      // console.log(htmlBotComp)
       this.htmlHistory.push({
         id: uuid.v4(),
         sender: 'ai',
@@ -49,11 +50,13 @@ class AIUX extends Component {
       }
     }
     if (prevProps.htmlBotComp !== this.props.htmlBotComp) {
+      // console.log(prevProps.htmlBotComp)
       if (prevProps.htmlBotComp) {
         this.htmlHistory.push({
           id: uuid.v4(),
           sender: 'ai',
-          com: prevProps.htmlBotComp
+          com: prevProps.htmlBotComp,
+          fullWidth: prevProps.htmlBotComp.props.data.message.payload.type === 'locations',
         })
       }
     }
@@ -116,29 +119,37 @@ class AIUX extends Component {
           {
             this.htmlHistory.map((_html) => {
               console.log(_html)
-              return (
-                <div key={_html.id} style={messageStyles(_html.sender).container}>
-                  <div style={messageStyles(_html.sender).message}>
-                    {
-                      _html.sender === 'user'
-                      ?
-                      null
-                      :
-                      <Avatar src={this.props.botIcon} shape='circle' size='large' />
-                    }
-                    <div style={{ margin: '0px 10px' }}>
-                      {_html.com}
-                    </div>
-                    {
-                      _html.sender === 'user'
-                      ?
-                      <Avatar icon='user' shape='circle' size='large' />
-                      :
-                      null
-                    }
+              if (_html.fullWidth) {
+                return (
+                  <div key={_html.id} style={messageStyles(_html.sender).container}>
+                    { _html.com }
                   </div>
-                </div>
-              )
+                )
+              } else {
+                return (
+                  <div key={_html.id} style={messageStyles(_html.sender).container}>
+                    <div style={messageStyles(_html.sender).message}>
+                      {
+                        _html.sender === 'user'
+                        ?
+                        null
+                        :
+                        <Avatar src={this.props.botIcon} shape='circle' size='large' />
+                      }
+                      <div style={{ margin: '0px 10px' }}>
+                        {_html.com}
+                      </div>
+                      {
+                        _html.sender === 'user'
+                        ?
+                        <Avatar icon='user' shape='circle' size='large' />
+                        :
+                        null
+                      }
+                    </div>
+                  </div>
+                )
+              }
             })
           }
         </div>

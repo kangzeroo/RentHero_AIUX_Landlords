@@ -6,8 +6,8 @@
 // DEV
 
 // STAGING
-export const DIALOGFLOW_MS = 'https://7e400996.ngrok.io'
-export const FCM_MS = 'https://b15059e9.ngrok.io'
+export const DIALOGFLOW_MS = 'https://64cf8035.ngrok.io'
+export const FCM_MS = 'https://7fa9e041.ngrok.io'
 export const TENANT_AD_MS = 'https://renthero.host:8202'
 
 // PROD
