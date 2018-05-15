@@ -61,6 +61,9 @@ class AIUX extends Component {
 
   componentDidUpdate() {
     this.scrollDown()
+    setTimeout(() => {
+      this.scrollDown()
+    }, 1000)
   }
 
   scrollDown() {
@@ -272,6 +275,7 @@ const messageStyles = (sender) => {
   return {
     container: {
       width: '100%',
+      height: 'auto',
     },
     message: {
       float: floatDirection,

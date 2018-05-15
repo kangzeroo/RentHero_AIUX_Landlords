@@ -56,7 +56,7 @@ class GenerateBotHTML extends Component {
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
           <SubtitlesMachine
-            speed={0.00000001}
+            speed={0.1}
             text={this.props.data.message.text}
             textStyles={{
               // fontSize: '1.3rem',
@@ -90,7 +90,7 @@ class GenerateBotHTML extends Component {
       }
     } else {
       return (<SubtitlesMachine
-        speed={0.00000001}
+        speed={0.1}
         text={this.props.data.message.text}
         textStyles={{
           // fontSize: '1.3rem',

@@ -23,7 +23,13 @@ class SubtitlesMachine extends Component {
   }
 
   componentDidMount() {
-    this.renderAnimation(this.props.text)
+    if (this.props.text.length > 250) {
+      this.setState({
+        text: this.props.text
+      })
+    } else {
+      this.renderAnimation(this.props.text)
+    }
   }
 
   renderAnimation(text) {
