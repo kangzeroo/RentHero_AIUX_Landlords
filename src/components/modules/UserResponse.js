@@ -59,6 +59,9 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			padding: '10px',
+			borderRadius: '10px',
+			backgroundColor: 'aliceblue'
 		}
 	}
 }

@@ -18,6 +18,8 @@ import UserResponse from '../modules/UserResponse'
 import GenerateBotHTML from '../generators/GenerateBotHTML'
 import GenerateInput from '../generators/GenerateInput'
 import AIUX from './AIUX'
+import { getAdvertisement } from '../../api/advertisements/ads_api'
+import { saveAdToRedux } from '../../actions/advertisements/ads_actions'
 
 class ConvoUI extends Component {
 
@@ -38,6 +40,7 @@ class ConvoUI extends Component {
 		this.initiateDialogFlow()
 		this.listenFCM()
 		this.listenToVisibility()
+		this.getAd()
 	}
 
 	initObservable() {
@@ -191,6 +194,17 @@ class ConvoUI extends Component {
 			})
 	}
 
+	getAd() {
+		getAdvertisement(this.props.ad_id)
+		.then((data) => {
+			console.log(data)
+			this.props.saveAdToRedux(data)
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+	}
+
 	listenFCM() {
 		firebase.messaging().onMessage((payload) => {
 			console.log('Message received. ', payload)
@@ -256,6 +270,7 @@ ConvoUI.propTypes = {
 	history: PropTypes.object.isRequired,
 	ad_id: PropTypes.string.isRequired,
 	initializeFirebaseNotifications: PropTypes.func.isRequired,
+	saveAdToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -277,6 +292,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
 		initializeFirebaseNotifications,
+		saveAdToRedux,
 	})(RadiumHOC)
 )
 

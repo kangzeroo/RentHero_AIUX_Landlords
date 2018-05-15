@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import appReducer from './app/app_reducer'
 import chatReducer from './chat/chat_reducer'
+import adsReducer from './advertisements/ads_reducer'
 
 
 // takes all your seperate reducers into one giant reducer
@@ -9,6 +10,7 @@ import chatReducer from './chat/chat_reducer'
 const rootReducer = combineReducers({
 	app: appReducer,
 	chat: chatReducer,
+	advertisements: adsReducer,
 })
 
 export default rootReducer
