@@ -23,10 +23,6 @@ import MapComponent from '../modules/MapComponent'
 
 class GenerateBotHTML extends Component {
 
-  componentDidMount() {
-    console.log(this.props.data)
-  }
-
   generateHTML() {
     console.log(this.props.data)
     if (this.props.data.message.payload) {
@@ -60,7 +56,7 @@ class GenerateBotHTML extends Component {
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
           <SubtitlesMachine
-            speed={0.00000000000001}
+            speed={0.00000001}
             text={this.props.data.message.text}
             textStyles={{
               // fontSize: '1.3rem',
@@ -92,6 +88,26 @@ class GenerateBotHTML extends Component {
           />
         )
       }
+    } else {
+      return (<SubtitlesMachine
+        speed={0.00000001}
+        text={this.props.data.message.text}
+        textStyles={{
+          // fontSize: '1.3rem',
+          color: 'black',
+          textAlign: 'left',
+        }}
+        containerStyles={{
+          width: '100%',
+          backgroundColor: 'aliceblue',
+          padding: '10px',
+          borderRadius: '10px',
+        }}
+        doneEvent={() => {
+          console.log('DONE')
+          this.props.onDone()
+        }}
+      />)
     }
   }
 

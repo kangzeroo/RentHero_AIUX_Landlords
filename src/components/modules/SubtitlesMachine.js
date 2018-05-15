@@ -17,7 +17,8 @@ class SubtitlesMachine extends Component {
   constructor() {
     super()
     this.state = {
-      text: ''
+      text: '',
+      inverse_text: '',
     }
   }
 
@@ -36,7 +37,8 @@ class SubtitlesMachine extends Component {
         obs.complete()
       } else {
         this.setState({
-          text: text.slice(0, count)
+          text: text.slice(0, count),
+          inverse_text: text.slice(count)
         })
         if (lex[count-1] === ',') {
           waitTime = waitTime * 4
@@ -72,6 +74,7 @@ class SubtitlesMachine extends Component {
 		return (
 			<div id='SubtitlesMachine' style={comStyles({ containerStyles: this.props.containerStyles }).container}>
 				<div style={comStyles({ textStyles: this.props.textStyles }).text}>{this.state.text}</div>
+				<div style={comStyles({ textStyles: this.props.textStyles }).inverse_text}>{this.state.inverse_text}</div>
 			</div>
 		)
 	}
@@ -130,12 +133,16 @@ const comStyles = ({ containerStyles, textStyles }) => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       flexWrap: 'wrap',
       ...containerStyles,
 		},
     text: {
       ...textStyles
+    },
+    inverse_text: {
+      ...textStyles,
+      color: 'rgba(0,0,0,0)'
     }
 	}
 }
