@@ -75,7 +75,7 @@ class QuickReply extends Component {
 		return (
 			<div id='QuickReply' style={comStyles().container}>
         <SubtitlesMachine
-          speed={0.4}
+          speed={0.00000001}
           text={this.props.data.message.text}
           textStyles={{
             color: 'black',
