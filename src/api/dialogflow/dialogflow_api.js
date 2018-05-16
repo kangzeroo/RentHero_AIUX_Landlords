@@ -33,3 +33,17 @@ export const sendMessageToDialogFlow = (message, session_id, ad_id, bot_id, iden
   })
   return p
 }
+
+export const dialogFlowPropertyQuestion = (session_id, ad_id, identityId, botId) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${DIALOGFLOW_MS}/dialogflow_property_question`, { session_id, ad_id, identityId, botId, }, authHeaders())
+      .then((data) => {
+        console.log(data.data)
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

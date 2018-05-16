@@ -42,19 +42,7 @@ class ConvoUI extends Component {
 		this.listenFCM()
 		this.listenToVisibility()
 		this.initializeAdAndDialogflow()
-		// this.getRepresentativeForAd()
-		// if (this.props.identityId && this.props.identityId.length > 0) {
-		// 	console.log(this.props.identityId)
-		// 	this.initiateDialogFlow(this.props.identityId)
-		// }
 	}
-
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props.identityId !== nextProps.identityId) {
-	// 		console.log(this.props.identityId, nextProps.identityId)
-	// 	  this.initiateDialogFlow(nextProps.identityId)
-	// 	}
-	// }
 
 	initObservable() {
 		this.feedInObserverable = Rx.Observable.create((obs) => {
@@ -196,7 +184,7 @@ class ConvoUI extends Component {
 	initializeAdAndDialogflow() {
 		getAdvertisement(this.props.ad_id)
 		.then((data) => {
-			console.log(data)
+			// console.log(data)
 			return this.props.saveAdToRedux(data)
 		})
 		.then(() => {
@@ -206,8 +194,8 @@ class ConvoUI extends Component {
 			return this.props.saveBotToRedux(data)
 		})
 		.then(() => {
-			console.log(this.props.representative)
-			console.log(this.props.identityId)
+			// console.log(this.props.representative)
+			// console.log(this.props.identityId)
 			this.initiateDialogFlow(this.props.identityId, this.props.representative.bot_id)
 		})
 		.catch((err) => {
@@ -223,10 +211,11 @@ class ConvoUI extends Component {
 		console.log(session_id)
 		initDialogFlow(session_id, this.props.ad_id, identityId, botId)
 			.then((msg) => {
+				console.log(msg)
 				this.props.initializeFirebaseNotifications()
 				this.setState({
 					session_id: msg.session_id,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 				this.props.saveSessionIdToRedux(msg.session_id)
@@ -253,6 +242,7 @@ class ConvoUI extends Component {
 				...payload.notification,
 				message: payload.notification.body
 			}
+			console.log(msg)
 			this.setState({
 				session_id: msg.session_id,
 				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
