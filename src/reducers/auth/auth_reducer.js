@@ -1,24 +1,24 @@
 import {
-  CHANGE_CURRENT_AD,
-  SAVE_REPRESENTATIVE,
+  SAVE_IDENTITY,
+  SAVE_SESSION_ID,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
-  current_ad: {},
-  representative: {},
+  identityId: '',
+  session_id: '',
 }
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-    case CHANGE_CURRENT_AD:
+    case SAVE_IDENTITY:
       return {
         ...state,
-        current_ad: action.payload,
+        identityId: action.payload,
       }
-    case SAVE_REPRESENTATIVE:
+    case SAVE_SESSION_ID:
       return {
         ...state,
-        representative: action.payload,
+        session_id: action.payload,
       }
 		default:
 			return {

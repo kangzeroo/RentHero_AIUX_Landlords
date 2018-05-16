@@ -19,7 +19,9 @@ import GenerateBotHTML from '../generators/GenerateBotHTML'
 import GenerateInput from '../generators/GenerateInput'
 import AIUX from './AIUX'
 import { getAdvertisement } from '../../api/advertisements/ads_api'
-import { saveAdToRedux } from '../../actions/advertisements/ads_actions'
+import { getRepForProperty } from '../../api/advertisements/bots_api'
+import { saveAdToRedux, saveBotToRedux } from '../../actions/advertisements/ads_actions'
+import { saveSessionIdToRedux } from '../../actions/auth/auth_actions'
 
 class ConvoUI extends Component {
 
@@ -37,11 +39,22 @@ class ConvoUI extends Component {
 
 	componentDidMount() {
 		this.initObservable()
-		this.initiateDialogFlow()
 		this.listenFCM()
 		this.listenToVisibility()
-		this.getAd()
+		this.initializeAdAndDialogflow()
+		// this.getRepresentativeForAd()
+		// if (this.props.identityId && this.props.identityId.length > 0) {
+		// 	console.log(this.props.identityId)
+		// 	this.initiateDialogFlow(this.props.identityId)
+		// }
 	}
+
+	// componentWillReceiveProps(nextProps) {
+	// 	if (this.props.identityId !== nextProps.identityId) {
+	// 		console.log(this.props.identityId, nextProps.identityId)
+	// 	  this.initiateDialogFlow(nextProps.identityId)
+	// 	}
+	// }
 
 	initObservable() {
 		this.feedInObserverable = Rx.Observable.create((obs) => {
@@ -180,8 +193,35 @@ class ConvoUI extends Component {
 		}, 5000)
 	}
 
-	initiateDialogFlow() {
-		initDialogFlow(this.props.ad_id)
+	initializeAdAndDialogflow() {
+		getAdvertisement(this.props.ad_id)
+		.then((data) => {
+			console.log(data)
+			return this.props.saveAdToRedux(data)
+		})
+		.then(() => {
+			return getRepForProperty(this.props.ad_id)
+		})
+		.then((data) => {
+			return this.props.saveBotToRedux(data)
+		})
+		.then(() => {
+			console.log(this.props.representative)
+			console.log(this.props.identityId)
+			this.initiateDialogFlow(this.props.identityId, this.props.representative.bot_id)
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+	}
+
+	initiateDialogFlow(identityId, botId) {
+		console.log('INITIATING DIALOGFLOW!!!!!')
+		// console.log(identityId)
+		// console.log(this.props.representative.bot_id)
+		const session_id = localStorage.getItem('session_id')
+		console.log(session_id)
+		initDialogFlow(session_id, this.props.ad_id, identityId, botId)
 			.then((msg) => {
 				this.props.initializeFirebaseNotifications()
 				this.setState({
@@ -189,20 +229,21 @@ class ConvoUI extends Component {
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
+				this.props.saveSessionIdToRedux(msg.session_id)
 			}).catch((err) => {
 				console.log(err)
 			})
 	}
 
-	getAd() {
-		getAdvertisement(this.props.ad_id)
-		.then((data) => {
-			console.log(data)
-			this.props.saveAdToRedux(data)
-		})
-		.catch((err) => {
-			console.log(err)
-		})
+	getRepresentativeForAd() {
+		getRepForProperty(this.props.ad_id)
+			.then((data) => {
+				console.log(data)
+				this.props.saveBotToRedux(data)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
 	listenFCM() {
@@ -235,7 +276,7 @@ class ConvoUI extends Component {
 			nextHtmlUserComp: (<UserResponse text={text} />),
 		})
 		// Promise.resolve() represents some API call
-		sendMessageToDialogFlow(text, this.state.session_id, this.props.ad_id)
+		sendMessageToDialogFlow(text, this.props.session_id, this.props.ad_id, this.props.representative.bot_id, this.props.identityId)
 			.then((msg) => {
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
@@ -271,6 +312,11 @@ ConvoUI.propTypes = {
 	ad_id: PropTypes.string.isRequired,
 	initializeFirebaseNotifications: PropTypes.func.isRequired,
 	saveAdToRedux: PropTypes.func.isRequired,
+	saveBotToRedux: PropTypes.func.isRequired,
+	saveSessionIdToRedux: PropTypes.func.isRequired,
+	identityId: PropTypes.string.isRequired,
+	representative: PropTypes.object.isRequired,
+	session_id: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -284,7 +330,9 @@ const RadiumHOC = Radium(ConvoUI)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+		identityId: redux.auth.identityId,
+		representative: redux.advertisements.representative,
+		session_id: redux.auth.session_id,
 	}
 }
 
@@ -293,6 +341,8 @@ export default withRouter(
 	connect(mapReduxToProps, {
 		initializeFirebaseNotifications,
 		saveAdToRedux,
+		saveBotToRedux,
+		saveSessionIdToRedux,
 	})(RadiumHOC)
 )
 
