@@ -90,15 +90,9 @@ class GenerateBotHTML extends Component {
         )
       } else if (this.props.data.message.payload.type === 'locations') {
         return (
-          <div>
-            <QuickMessage
-              text={this.props.data.message.payload.text}
-            />
-            <br />
-            <LocationsComponent
-              listOfResults={this.props.data.message.payload.results}
-            />
-          </div>
+          <LocationsComponent
+            listOfResults={this.props.data.message.payload.results}
+          />
         )
       }
     } else {
