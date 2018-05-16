@@ -27,6 +27,7 @@ class LocationsComponent extends Component {
   }
 
   componentDidMount() {
+    console.log('====MOUNTED LOCATIONS====')
     this.mountGoogleMap()
   }
 
@@ -44,7 +45,7 @@ class LocationsComponent extends Component {
           position: google.maps.ControlPosition.RIGHT_TOP
       },
     }
-    const mapTarget = new google.maps.Map(document.getElementById('mapTarget'), mapOptions)
+    const mapTarget = new google.maps.Map(document.getElementById(this.props.id), mapOptions)
 
     // this.refreshPins()
     // marker.setMap(mapTarget)
@@ -86,7 +87,7 @@ class LocationsComponent extends Component {
 	render() {
 		return (
 			<div id='LocationsComponent' style={comStyles().container}>
-        <div id='mapTarget' style={comStyles().map}></div>
+        <div id={this.props.id} style={comStyles().map}></div>
         {
           this.state.current_location && this.state.current_location.reference
           ?
@@ -122,6 +123,7 @@ LocationsComponent.propTypes = {
 	history: PropTypes.object.isRequired,
   current_ad: PropTypes.object.isRequired,
   listOfResults: PropTypes.array.isRequired,  // passed in
+  id: PropTypes.string.isRequired,            // passed in
 }
 
 // for all optional props, define a default value
@@ -154,8 +156,8 @@ const comStyles = () => {
 		container: {
       // display: 'flex',
       // flexDirection: 'row',
-      height: '300px',
-      width: '100vw',
+      height: '350px',
+      width: '80vw',
       // borderRadius: '20px',
       position: 'relative',
 		},

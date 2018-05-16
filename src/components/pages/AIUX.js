@@ -78,10 +78,11 @@ class AIUX extends Component {
 		return (
 			<div id='AIUX' style={comStyles().container}>
         <div style={comStyles().header}>
-          <h1 style={{ color: 'white' }}>{this.props.representative.friendly_name}</h1>
+          <Avatar src={this.props.representative.thumbnail} />
+          <h1 style={{ color: 'white', marginBottom: '0', }}>{this.props.representative.friendly_name}</h1>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
-          <br /><br />
+          <br />
         {/*
           <div style={comStyles().botProfile}>
             <img
@@ -216,7 +217,7 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       color: 'white',
-      minHeight: '30px',
+      height: '7vh',
       minWidth: '100%',
       maxWidth: '100%',
       // flexGrow: 1,
@@ -233,7 +234,7 @@ const comStyles = () => {
       maxWidth: '100%',
       flexGrow: 16,
       backgroundColor: 'white',
-      maxHeight: '90vh',
+      maxHeight: '93vh',
       overflowY: 'scroll',
       // background: '#56CCF2',  /* fallback for old browsers */
       // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */

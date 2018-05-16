@@ -34,7 +34,7 @@ class MapComponent extends Component {
           position: google.maps.ControlPosition.RIGHT_TOP
       },
     }
-    const mapTarget = new google.maps.Map(document.getElementById('mapTarget'), mapOptions)
+    const mapTarget = new google.maps.Map(document.getElementById(this.props.id), mapOptions)
     const marker = new google.maps.Marker({
         position: new google.maps.LatLng(this.props.coords.gps_x, this.props.coords.gps_y),
         pin_type: 'building',
@@ -47,7 +47,7 @@ class MapComponent extends Component {
 	render() {
 		return (
 			<div id='MapComponent' style={comStyles().container}>
-        <div id='mapTarget' style={comStyles().map}></div>
+        <div id={this.props.id} style={comStyles().map}></div>
         <div style={comStyles().addressContainer}>{ this.props.address }</div>
 			</div>
 		)
@@ -59,6 +59,7 @@ MapComponent.propTypes = {
 	history: PropTypes.object.isRequired,
 	coords: PropTypes.object.isRequired,				// passed in
   address: PropTypes.string.isRequired,       // passed in
+  id: PropTypes.string.isRequired,            // passed in
 }
 
 // for all optional props, define a default value
