@@ -9,9 +9,9 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import {
-
+	Spin,
 } from 'antd'
-import { initDialogFlow, sendMessageToDialogFlow } from '../../api/dialogflow/dialogflow_api'
+import { initDialogFlow, sendMessageToDialogFlow, dialogFlowInitQualification } from '../../api/dialogflow/dialogflow_api'
 import { initializeFirebaseNotifications, addChatHistory } from '../../actions/firebase/firebase_cloud_messaging_actions'
 import { getMostRecentChat } from '../../api/fcm/firebase_cloud_messaging'
 import UserResponse from '../modules/UserResponse'
@@ -32,6 +32,9 @@ class ConvoUI extends Component {
 			nextHtmlBotComp: null,
 			nextHtmlUserComp: null,
 			nextHtmlInput: null,
+
+
+			loading: true,
 		}
 		this.feedInObserverable = null
 		this.feedInObserver = null
@@ -215,8 +218,9 @@ class ConvoUI extends Component {
 				this.props.initializeFirebaseNotifications()
 				this.setState({
 					session_id: msg.session_id,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} initQualify={() => this.initiateQualification()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					loading: false,
 				})
 				this.props.saveSessionIdToRedux(msg.session_id)
 			}).catch((err) => {
@@ -245,7 +249,7 @@ class ConvoUI extends Component {
 			console.log(msg)
 			this.setState({
 				session_id: msg.session_id,
-				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
+				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} initQualify={() => this.initiateQualification()} />),
 				nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 			})
 		})
@@ -270,7 +274,22 @@ class ConvoUI extends Component {
 			.then((msg) => {
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} initQualify={() => this.initiateQualification()} />),
+					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
+
+	initiateQualification() {
+		console.log('initiateQualification')
+		dialogFlowInitQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
+			.then((msg) => {
+				this.feedInObserver.next({
+					nextHtmlUserComp: null,
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.triggerDoneEvent()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 			})
@@ -283,16 +302,28 @@ class ConvoUI extends Component {
 		console.log('nextHtmlBotCompDoneEvent()')
 	}
 
+	triggerDoneEvent() {
+		// dialogflow is now done
+	}
+
 	render() {
-		return (
-			<div id='ConvoUI' style={comStyles().container}>
-				<AIUX
-					htmlBotComp={this.state.nextHtmlBotComp}
-					htmlUserComp={this.state.nextHtmlUserComp}
-					htmlInput={this.state.nextHtmlInput}
-				/>
-			</div>
-		)
+		if (this.state.loading) {
+			return (
+				<div id='ConvoUI' style={comStyles().loadingContainer}>
+					<Spin />
+				</div>
+			)
+		} else {
+			return (
+				<div id='ConvoUI' style={comStyles().container}>
+					<AIUX
+						htmlBotComp={this.state.nextHtmlBotComp}
+						htmlUserComp={this.state.nextHtmlUserComp}
+						htmlInput={this.state.nextHtmlInput}
+					/>
+				</div>
+			)
+		}
 	}
 }
 
@@ -348,6 +379,13 @@ const comStyles = () => {
       width: '100vw',
       justifyContent: 'center',
       alignItems: 'center',
+		},
+		loadingContainer: {
+			height: '100vh',
+			width: '100vw',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center'
 		},
 	}
 }

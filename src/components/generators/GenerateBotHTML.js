@@ -21,6 +21,7 @@ import QuickMessage from '../modules/QuickMessage'
 import ImagesViewer from '../modules/ImagesViewer'
 import MapComponent from '../modules/MapComponent'
 import LocationsComponent from '../modules/LocationsComponent'
+import Questions from '../modules/Questions'
 
 class GenerateBotHTML extends Component {
 
@@ -54,7 +55,14 @@ class GenerateBotHTML extends Component {
         )
       } else if (this.props.data.message.payload.quick_replies) {
         return (
-          <QuickReply data={this.props.data} submitMessage={(t) => this.props.onSubmit(t)} />
+          <QuickReply data={this.props.data} submitMessage={(t) => this.props.onSubmit(t)} initQualification={() => this.props.initQualify()} />
+        )
+      } else if (this.props.data.message.payload.questions) {
+        return (
+          <Questions
+            data={this.props.data}
+            onDone={() => this.props.onDone()}
+          />
         )
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
@@ -135,12 +143,14 @@ GenerateBotHTML.propTypes = {
   data: PropTypes.object.isRequired,
   onDone: PropTypes.func,             // passed in
   onSubmit: PropTypes.func,           // passed in
+  initQualify: PropTypes.func,        // passed in
 }
 
 // for all optional props, define a default value
 GenerateBotHTML.defaultProps = {
   onDone: () => {},
   onSubmit: () => {},
+  initQualify: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling

@@ -81,7 +81,7 @@ class AIUX extends Component {
           <h1 style={{ color: 'white' }}>{this.props.representative.friendly_name}</h1>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
-          <br /><br /><br />
+          <br /><br />
         {/*
           <div style={comStyles().botProfile}>
             <img

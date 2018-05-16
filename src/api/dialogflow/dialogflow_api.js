@@ -47,3 +47,17 @@ export const dialogFlowPropertyQuestion = (session_id, ad_id, identityId, botId)
   })
   return p
 }
+
+export const dialogFlowInitQualification = (session_id, ad_id, identityId, botId) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${DIALOGFLOW_MS}/dialogflow_init_qualification`, { session_id, ad_id, identityId, botId, }, authHeaders())
+      .then((data) => {
+        console.log(data.data)
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
