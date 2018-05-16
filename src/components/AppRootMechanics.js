@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
+import { retrieveTenantFromLocalStorage, registerUnauthRoleWithCognito } from '../api/aws/aws-cognito'
 
 // this 'higher order component'(HOC) creator takes a component (called ComposedComponent)
 // and returns a new component with added functionality
@@ -17,6 +18,23 @@ export default (ComposedComponent) => {
 		componentDidMount() {
 			// const landlord_id = document.getElementById('root').getAttribute('landlord')
 			// console.log(landlord_id)
+				this.checkIfAlreadyLoggedIn()
+		}
+
+		checkIfAlreadyLoggedIn() {
+			retrieveTenantFromLocalStorage()
+				.then(({ IdentityId }) => {
+					console.log(IdentityId)
+					// return getTenantInfo(IdentityId)
+				})
+				.catch((err) => {
+					console.log(err)
+					registerUnauthRoleWithCognito().then(({ IdentityId }) => {
+		        console.log(IdentityId)
+						// us-east-1:90170b10-491a-4a19-8faf-2144e2ba0f35
+						// return getLeadInfo(IdentityId)
+		      })
+				})
 		}
 
 		render() {
