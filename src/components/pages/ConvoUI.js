@@ -11,7 +11,7 @@ import firebase from 'firebase'
 import {
 	Spin,
 } from 'antd'
-import { initDialogFlow, sendMessageToDialogFlow, dialogFlowInitQualification } from '../../api/dialogflow/dialogflow_api'
+import { initDialogFlow, sendMessageToDialogFlow, dialogFlowInitQualification, dialogFlowCompleteQualification } from '../../api/dialogflow/dialogflow_api'
 import { initializeFirebaseNotifications, addChatHistory } from '../../actions/firebase/firebase_cloud_messaging_actions'
 import { getMostRecentChat } from '../../api/fcm/firebase_cloud_messaging'
 import UserResponse from '../modules/UserResponse'
@@ -22,6 +22,7 @@ import { getAdvertisement } from '../../api/advertisements/ads_api'
 import { getRepForProperty } from '../../api/advertisements/bots_api'
 import { saveAdToRedux, saveBotToRedux } from '../../actions/advertisements/ads_actions'
 import { saveSessionIdToRedux } from '../../actions/auth/auth_actions'
+import { setInputStateInRedux } from '../../actions/chat/chat_actions'
 
 class ConvoUI extends Component {
 
@@ -285,11 +286,15 @@ class ConvoUI extends Component {
 
 	initiateQualification() {
 		console.log('initiateQualification')
+		this.props.setInputStateInRedux({
+			show_input: true,
+			input_placeholder: 'Ask me more questions!',
+		})
 		dialogFlowInitQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
 			.then((msg) => {
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.triggerDoneEvent()} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.completedQualification()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 			})
@@ -302,8 +307,19 @@ class ConvoUI extends Component {
 		console.log('nextHtmlBotCompDoneEvent()')
 	}
 
-	triggerDoneEvent() {
-		// dialogflow is now done
+	completedQualification() {
+		dialogFlowCompleteQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
+			.then((msg) => {
+				this.feedInObserver.next({
+					nextHtmlUserComp: null,
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
+					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+
 	}
 
 	render() {
@@ -338,6 +354,7 @@ ConvoUI.propTypes = {
 	identityId: PropTypes.string.isRequired,
 	representative: PropTypes.object.isRequired,
 	session_id: PropTypes.string.isRequired,
+	setInputStateInRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -364,6 +381,7 @@ export default withRouter(
 		saveAdToRedux,
 		saveBotToRedux,
 		saveSessionIdToRedux,
+		setInputStateInRedux,
 	})(RadiumHOC)
 )
 

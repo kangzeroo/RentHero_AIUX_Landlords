@@ -24,6 +24,7 @@ class Questions extends Component {
       textLoaded: false,
 
       visibleIndex: 1,
+      saveIndex: -1,
 
       answers: ['', '', ''],
     }
@@ -33,6 +34,19 @@ class Questions extends Component {
     console.log('QUESTIONSSSSS')
   }
 
+  componentDidUpdate() {
+    this.scrollDown()
+    setTimeout(() => {
+      this.scrollDown()
+    }, 1000)
+  }
+
+  scrollDown() {
+    console.log('SCROLL DOWN')
+    const objDiv = document.getElementById('QuestionsContainer');
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
   saveAnswerAndMoveOn(question, index) {
     if (index < this.props.data.message.payload.questions.length) {
       saveQualificationAnswer(this.props.identityId, question.question_id, this.state.answers[index - 1])
@@ -40,11 +54,15 @@ class Questions extends Component {
           message.success(data.message)
           this.setState({
             visibleIndex: index + 1,
+            saveIndex: this.state.saveIndex + 1,
           })
         })
     } else {
       saveQualificationAnswer(this.props.identityId, question.question_id, this.state.answers[index - 1])
         .then((data) => {
+          this.setState({
+            saveIndex: this.state.saveIndex + 1,
+          })
           message.success(data.message)
           this.props.onDone()
         })
@@ -53,7 +71,7 @@ class Questions extends Component {
 
   renderQuestions() {
     return (
-      <div>
+      <div id='QuestionsContainer'>
         {
           this.props.data.message.payload.questions.slice(0, this.state.visibleIndex).map((question, index) => {
             const handleChange = (e, index) => {
@@ -73,14 +91,23 @@ class Questions extends Component {
                       value={this.state.answers[index]}
                       onChange={(e) => handleChange(e, index)}
                       placeholder='Enter your answer here.'
+                      onPressEnter={() => this.saveAnswerAndMoveOn(question, index + 1)}
+                      disabled={index <= this.state.saveIndex}
                     />
                   </Form.Item>
                   <Form.Item>
                     <Button
                       type='primary'
                       onClick={() => this.saveAnswerAndMoveOn(question, index + 1)}
+                      disabled={index <= this.state.saveIndex}
                     >
-                      SAVE
+                      {
+                        index <= this.state.saveIndex
+                        ?
+                        <div>ANSWERED!</div>
+                        :
+                        <div>ANSWER</div>
+                      }
                     </Button>
                   </Form.Item>
                 </Form>

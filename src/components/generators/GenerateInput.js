@@ -9,8 +9,9 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import InputMachine from '../modules/InputMachine'
 import {
-
-} from 'antd-mobile'
+  Button,
+  Icon,
+} from 'antd'
 
 
 class GenerateInput extends Component {
@@ -18,11 +19,11 @@ class GenerateInput extends Component {
   generateHTML() {
     if (this.props.data.message) {
       return (
-        <InputMachine onSubmit={(text) => this.props.onSubmit(text)} />
+        <InputMachine onSubmit={(text) => this.props.onSubmit(text)} style={{ width: '100%', marginLeft: '10px', }} />
       )
     } else {
       return (
-        <InputMachine onSubmit={(text) => this.props.onSubmit(text)} />
+        <InputMachine onSubmit={(text) => this.props.onSubmit(text)} style={{ width: '100%', marginLeft: '10px', }} />
       )
     }
   }
@@ -30,6 +31,9 @@ class GenerateInput extends Component {
 	render() {
 		return (
 			<div id='GenerateInput' style={comStyles().container}>
+        <Button type='default' shape='circle' style={{ backgroundColor: '#f85032' }} size='large' onClick={() => this.props.onSubmit(`I'm interested in the property`)}>
+          <Icon type='heart' style={{ color: 'white' }} />
+        </Button>
 				{this.generateHTML()}
 			</div>
 		)
@@ -72,7 +76,8 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
+      alignItems: 'center',
       width: '100%',
 		}
 	}

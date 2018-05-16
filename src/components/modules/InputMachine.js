@@ -101,6 +101,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
+      width: '100%',
+      marginLeft: '10px'
 		}
 	}
 }

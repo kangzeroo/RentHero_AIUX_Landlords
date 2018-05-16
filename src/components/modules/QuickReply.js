@@ -160,6 +160,7 @@ class QuickReply extends Component {
     )
   }
 
+
   renderFriendlyNameInput(qr) {
     if (this.state.savedFriendlyName) {
       return (
@@ -193,6 +194,10 @@ class QuickReply extends Component {
   }
 
   renderAcquireContact(qr) {
+    this.props.setInputStateInRedux({
+      show_input: false,
+      input_placeholder: '',
+    })
     if (this.state.contact_updated) {
       return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '10px', }}>
@@ -257,7 +262,7 @@ class QuickReply extends Component {
             </Form.Item>
             <Form.Item>
               <Button type='primary' onClick={() => this.updateContactDetails()} loading={this.state.saving_contact} disabled={this.state.saving_contact}>
-                SAVE
+                CONFIRM
               </Button>
             </Form.Item>
           </Form>
@@ -329,7 +334,7 @@ class QuickReply extends Component {
           this.props.data.message.message.length > 0
           ?
           <SubtitlesMachine
-            speed={0.1}
+            speed={0.25}
             text={this.props.data.message.message}
             textStyles={{
               color: 'black',

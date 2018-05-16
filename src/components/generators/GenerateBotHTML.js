@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import SubtitlesMachine from '../modules/SubtitlesMachine'
 import {
@@ -67,7 +68,7 @@ class GenerateBotHTML extends Component {
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
           <SubtitlesMachine
-            speed={0.1}
+            speed={0.25}
             text={this.props.data.message.text}
             textStyles={{
               // fontSize: '1.3rem',
@@ -75,7 +76,7 @@ class GenerateBotHTML extends Component {
               textAlign: 'left',
             }}
             containerStyles={{
-              width: '100%',
+              width: '80%',
               backgroundColor: 'aliceblue',
               padding: '10px',
               borderRadius: '10px',
@@ -96,18 +97,21 @@ class GenerateBotHTML extends Component {
           <MapComponent
             coords={this.props.data.message.payload.location}
             address={this.props.data.message.payload.address}
+            id={uuid.v4()}
           />
         )
       } else if (this.props.data.message.payload.type === 'locations') {
         return (
           <LocationsComponent
             listOfResults={this.props.data.message.payload.results}
+            id={uuid.v4()}
           />
         )
       }
     } else {
-      return (<SubtitlesMachine
-        speed={0.1}
+      return (
+      <SubtitlesMachine
+        speed={0.25}
         text={this.props.data.message.text}
         textStyles={{
           // fontSize: '1.3rem',
@@ -115,7 +119,7 @@ class GenerateBotHTML extends Component {
           textAlign: 'left',
         }}
         containerStyles={{
-          width: '100%',
+          width: '80%',
           backgroundColor: 'aliceblue',
           padding: '10px',
           borderRadius: '10px',
