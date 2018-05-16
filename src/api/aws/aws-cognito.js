@@ -7,7 +7,7 @@ AWS.config.update({
 	region: 'us-east-1'
 })
 
-export const retrieveStaffFromLocalStorage = () => {
+export const retrieveTenantFromLocalStorage = () => {
 	const p = new Promise((res, rej) => {
 			const x = localStorage.getItem('renthero_tenant_token')
 			if (x) {
@@ -132,6 +132,25 @@ export function registerPasswordlessAuth0WithCognito(id_token){
 		    // console.log('There was a problem logging you in.');
 				rej('No access token found')
 		  }
+	})
+	return p
+}
+
+export const registerUnauthRoleWithCognito = () => {
+	const p = new Promise((res, rej) => {
+		// Add the unauthenticated_staff user to the Cognito credentials login map.
+		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+			IdentityPoolId: AWS_FEDERATED_IDENTITY_ENV
+		})
+		// AWS Cognito Sync to sync Facebook
+		AWS.config.credentials.get(() => {
+			const client = new AWS.CognitoSyncManager()
+			// console.log(generate_TENANT_IDENTITY_POOL_ID())
+			console.log(AWS.config.credentials)
+			res({
+				IdentityId: AWS.config.credentials.data.IdentityId
+			})
+		})
 	})
 	return p
 }
