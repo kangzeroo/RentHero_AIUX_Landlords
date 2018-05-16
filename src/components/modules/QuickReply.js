@@ -21,7 +21,7 @@ import ImageCarousel from './ImageCarousel'
 import SubtitlesMachine from './SubtitlesMachine'
 import { saveFriendlyNameToLeads, updateLeadInfo, } from '../../api/leads/leads_api'
 import { setInputStateInRedux } from '../../actions/chat/chat_actions'
-import { dialogFlowPropertyQuestion, } from '../../api/dialogflow/dialogflow_api'
+import { dialogFlowPropertyQuestion, dialogFlowInitQualification, } from '../../api/dialogflow/dialogflow_api'
 
 class QuickReply extends Component {
 
@@ -123,6 +123,7 @@ class QuickReply extends Component {
             contact_updated: true,
             saving_contact: false,
           })
+          this.props.initQualification()
         })
     } else {
       this.setState({
@@ -373,11 +374,13 @@ QuickReply.propTypes = {
   session_id: PropTypes.string.isRequired,
   representative: PropTypes.object.isRequired,
   submitMessage: PropTypes.func,           // passed in
+  initQualification: PropTypes.func,       // passed in
 }
 
 // for all optional props, define a default value
 QuickReply.defaultProps = {
   onSubmit: () => {},
+  initQualification: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
