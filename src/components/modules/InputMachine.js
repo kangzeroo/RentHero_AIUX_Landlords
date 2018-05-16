@@ -54,9 +54,10 @@ class InputMachine extends Component {
           onChange={(e) => this.setState({
             input_text: e.target.value
           })}
-          placeholder='Send Message'
+          placeholder={this.props.input.input_placeholder}
           onPressEnter={() => this.submitText()}
           size='large'
+          style={{ width: '100%', }}
         />
 			</div>
 		)
@@ -67,6 +68,7 @@ class InputMachine extends Component {
 InputMachine.propTypes = {
 	history: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,      // passed in
+  input: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -80,7 +82,7 @@ const RadiumHOC = Radium(InputMachine)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    input: redux.chat.input,
 	}
 }
 

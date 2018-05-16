@@ -5,7 +5,10 @@ import {
 
 const INITIAL_STATE = {
   convo_history: [],
-  show_input: false,
+  input: {
+    show_input: false,
+    input_placeholder: 'Write a message!'
+  },
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -18,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
     case SET_INPUT_STATE:
       return {
         ...state,
-        show_input: action.payload,
+        input: action.payload,
       }
 		default:
 			return {

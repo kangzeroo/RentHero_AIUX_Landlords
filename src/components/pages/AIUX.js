@@ -135,13 +135,9 @@ class AIUX extends Component {
               // }
             })
           }
-          <div style={comStyles().userIcons}>
-            <Avatar src={this.props.representative.thumbnail} shape='circle' size='large' />
-            <Avatar icon='user' shape='circle' size='large' />
-          </div>
         </div>
         {
-          this.props.show_input
+          this.props.input.show_input
           ?
           <div style={inputStyles(3).botInput}>
             {
@@ -164,7 +160,7 @@ AIUX.propTypes = {
   htmlBotComp: PropTypes.object,       // passed in
   htmlUserComp: PropTypes.object,   // passed in
   htmlInput: PropTypes.object,      // passed in
-  show_input: PropTypes.bool.isRequired,
+  input: PropTypes.object.isRequired,
   representative: PropTypes.object.isRequired,
 }
 
@@ -183,7 +179,7 @@ const RadiumHOC = Radium(AIUX)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    show_input: redux.chat.show_input,
+    input: redux.chat.input,
     representative: redux.advertisements.representative,
 	}
 }
@@ -269,8 +265,12 @@ const inputStyles = (flexGrow = 0) => {
     botInput: {
       minWidth: '100%',
       maxWidth: '100%',
-      flexGrow: flexGrow,
-      // backgroundColor: 'blue',
+      // flexGrow: flexGrow,
+      backgroundColor: 'aliceblue',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '10px',
     }
   }
 }

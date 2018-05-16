@@ -53,7 +53,9 @@ class GenerateBotHTML extends Component {
           />
         )
       } else if (this.props.data.message.payload.quick_replies) {
-        return (<QuickReply data={this.props.data} />)
+        return (
+          <QuickReply data={this.props.data} submitMessage={(t) => this.props.onSubmit(t)} />
+        )
       } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
         return (
           <SubtitlesMachine
@@ -131,12 +133,14 @@ class GenerateBotHTML extends Component {
 GenerateBotHTML.propTypes = {
 	history: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  onDone: PropTypes.func,
+  onDone: PropTypes.func,             // passed in
+  onSubmit: PropTypes.func,           // passed in
 }
 
 // for all optional props, define a default value
 GenerateBotHTML.defaultProps = {
-  onDone: () => {}
+  onDone: () => {},
+  onSubmit: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
