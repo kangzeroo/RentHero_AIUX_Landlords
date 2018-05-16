@@ -6,14 +6,12 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import { retrieveTenantFromLocalStorage, registerUnauthRoleWithCognito } from '../api/aws/aws-cognito'
+import { saveIdentityToRedux } from '../actions/auth/auth_actions'
 
 // this 'higher order component'(HOC) creator takes a component (called ComposedComponent)
 // and returns a new component with added functionality
 export default (ComposedComponent) => {
 	class AppRootMechanics extends Component {
-
-    componentWillMount() {
-    }
 
 		componentDidMount() {
 			// const landlord_id = document.getElementById('root').getAttribute('landlord')
@@ -25,6 +23,7 @@ export default (ComposedComponent) => {
 			retrieveTenantFromLocalStorage()
 				.then(({ IdentityId }) => {
 					console.log(IdentityId)
+					return this.props.saveIdentityToRedux(IdentityId)
 					// return getTenantInfo(IdentityId)
 				})
 				.catch((err) => {
@@ -33,6 +32,7 @@ export default (ComposedComponent) => {
 		        console.log(IdentityId)
 						// us-east-1:90170b10-491a-4a19-8faf-2144e2ba0f35
 						// return getLeadInfo(IdentityId)
+						return this.props.saveIdentityToRedux(IdentityId)
 		      })
 				})
 		}
@@ -46,6 +46,7 @@ export default (ComposedComponent) => {
   // defines the types of variables in this.props
   AppRootMechanics.propTypes = {
   	history: PropTypes.object.isRequired,
+		saveIdentityToRedux: PropTypes.func.isRequired,
   }
 
   // for all optional props, define a default value
@@ -62,6 +63,7 @@ export default (ComposedComponent) => {
 	// we can actually nest HOC infinitely deep
 	return withRouter(
 		connect(mapStateToProps, {
+			saveIdentityToRedux,
     })(AppRootMechanics)
 	)
 }

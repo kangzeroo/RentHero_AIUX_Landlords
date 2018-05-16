@@ -56,7 +56,7 @@ class AIUX extends Component {
           id: uuid.v4(),
           sender: 'ai',
           com: prevProps.htmlBotComp,
-          fullWidth: prevProps.htmlBotComp.props.data.message.payload.type === 'locations',
+          // fullWidth: prevProps.htmlBotComp.props.data.message.payload.type === 'locations',
         })
       }
     }
@@ -74,35 +74,18 @@ class AIUX extends Component {
     objDiv.scrollTop = objDiv.scrollHeight;
   }
 
-  renderInput() {
-    if (this.state.input_type === 'input') {
-      return (
-        <Input
-
-        />
-      )
-    } else if (this.state.input_style === 'selection') {
-      return (
-        <List>
-          <Button>Selection 1</Button>
-          <Button>Selection 2</Button>
-          <Button>Slection 3</Button>
-        </List>
-      )
-    }
-  }
-
 	render() {
 		return (
 			<div id='AIUX' style={comStyles().container}>
         <div style={comStyles().header}>
-          <h1 style={{ color: 'white' }}>{this.props.botName}</h1>
+          <h1 style={{ color: 'white' }}>{this.props.representative.friendly_name}</h1>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
           <br /><br /><br />
+        {/*
           <div style={comStyles().botProfile}>
             <img
-              src={this.props.botIcon}
+              src={this.props.representative.thumbnail}
               alt='Avatar'
               style={{
                 borderRadius: '50%',
@@ -111,21 +94,21 @@ class AIUX extends Component {
               }}
             />
             <br />
-            <div style={{ fontWeight: 'bold', fontSize: '1.2REM' }}>{ this.props.botName }</div>
+            <div style={{ fontWeight: 'bold', fontSize: '1.2REM' }}>{ this.props.representative.friendly_name }</div>
             <Rate value={5} />
             <p>Intelligent Leasing Assistant</p>
           </div>
-          <br /><br />
+          */}
           {
             this.htmlHistory.map((_html) => {
               console.log(_html)
-              if (_html.fullWidth) {
-                return (
-                  <div key={_html.id} style={messageStyles(_html.sender).container}>
-                    { _html.com }
-                  </div>
-                )
-              } else {
+              // if (_html.fullWidth) {
+              //   return (
+              //     <div key={_html.id} style={messageStyles(_html.sender).container}>
+              //       { _html.com }
+              //     </div>
+              //   )
+              // } else {
                 return (
                   <div key={_html.id} style={messageStyles(_html.sender).container}>
                     <div style={messageStyles(_html.sender).message}>
@@ -134,7 +117,7 @@ class AIUX extends Component {
                         ?
                         null
                         :
-                        <Avatar src={this.props.botIcon} shape='circle' size='large' />
+                        <Avatar src={this.props.representative.thumbnail} shape='circle' size='large' />
                       }
                       <div style={{ margin: '0px 10px' }}>
                         {_html.com}
@@ -149,25 +132,24 @@ class AIUX extends Component {
                     </div>
                   </div>
                 )
-              }
+              // }
             })
           }
           <div style={comStyles().userIcons}>
-            <Avatar src={this.props.botIcon} shape='circle' size='large' />
+            <Avatar src={this.props.representative.thumbnail} shape='circle' size='large' />
             <Avatar icon='user' shape='circle' size='large' />
           </div>
         </div>
         {
-
+          this.props.show_input
+          ?
           <div style={inputStyles(3).botInput}>
             {
               this.props.htmlInput
             }
           </div>
-
-        }
-        {
-          // this.renderInput()
+          :
+          null
         }
 			</div>
 		)
@@ -177,17 +159,19 @@ class AIUX extends Component {
 // defines the types of variables in this.props
 AIUX.propTypes = {
 	history: PropTypes.object.isRequired,
-  botIcon: PropTypes.string,        // passed in
-  botName: PropTypes.string,        // passed in
+  // botIcon: PropTypes.string,        // passed in
+  // botName: PropTypes.string,        // passed in
   htmlBotComp: PropTypes.object,       // passed in
   htmlUserComp: PropTypes.object,   // passed in
   htmlInput: PropTypes.object,      // passed in
+  show_input: PropTypes.bool.isRequired,
+  representative: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
 AIUX.defaultProps = {
-  botIcon: 'https://i2-prod.mirror.co.uk/incoming/article10263400.ece/ALTERNATES/s1200/PROD-Kim-Jong-Un.jpg',
-  botName: 'Kim',
+  // botIcon: 'https://i2-prod.mirror.co.uk/incoming/article10263400.ece/ALTERNATES/s1200/PROD-Kim-Jong-Un.jpg',
+  // botName: 'Kim',
   htmlBotComp: null,
   htmlUserComp: null,
   htmlInput: null,
@@ -199,7 +183,8 @@ const RadiumHOC = Radium(AIUX)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    show_input: redux.chat.show_input,
+    representative: redux.advertisements.representative,
 	}
 }
 

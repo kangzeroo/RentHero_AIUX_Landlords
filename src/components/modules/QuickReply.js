@@ -12,9 +12,13 @@ import {
   List,
   Button,
   Divider,
+  Form,
+  message,
 } from 'antd'
 import ImageCarousel from './ImageCarousel'
 import SubtitlesMachine from './SubtitlesMachine'
+import { saveFriendlyNameToLeads } from '../../api/leads/leads_api'
+import { setInputStateInRedux } from '../../actions/chat/chat_actions'
 
 class QuickReply extends Component {
 
@@ -22,12 +26,80 @@ class QuickReply extends Component {
     super()
     this.state = {
       textLoaded: false,
+
+      friendlyName: '',
+      pressedEnterName: false,
+      savedFriendlyName: false,
     }
   }
 
   componentWillMount() {
     console.log(this.props.data)
     console.log(this.props.data.message.text)
+  }
+
+  saveFriendlyName() {
+    this.setState({
+      pressedEnterName: true,
+    }, () => {
+      saveFriendlyNameToLeads(this.props.identityId, this.state.friendlyName)
+        .then((data) => {
+          message.success(data.message)
+          this.setState({
+            savedFriendlyName: true,
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+          message.error(err.response.data)
+        })
+    })
+  }
+
+  initiateQuestioning() {
+    this.props.setInputStateInRedux(true)
+  }
+
+  renderPurposeSelectionlist() {
+    return (
+      <List>
+        <Button style={comStyles().selectButton} type='default' size='large' onClick={() => this.initiateQuestioning()}>I have a question about the property</Button>
+        <Button style={comStyles().selectButton} type='default' size='large'>I want to book a tour!</Button>
+        <Button style={comStyles().selectButton} type='default' size='large'>Other</Button>
+      </List>
+    )
+  }
+
+  renderFriendlyNameInput(qr) {
+    if (this.state.savedFriendlyName) {
+      return (
+        <div>
+          <p>{`Hello ${this.state.friendlyName}, How can I help you today? :)`}</p>
+          {
+            this.renderPurposeSelectionlist()
+          }
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <p>{ qr.title }</p>
+          <Form>
+            <Form.Item
+              validateStatus={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'error' : null}
+              help={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'Please enter a name we can call you by' : null}
+            >
+              <Input
+                placeholder='Enter Friendly Name'
+                value={this.state.friendlyName}
+                onChange={e => this.setState({ friendlyName: e.target.value })}
+                onPressEnter={() => this.saveFriendlyName()}
+              />
+            </Form.Item>
+          </Form>
+        </div>
+      )
+    }
   }
 
   renderQuickReplyOptions() {
@@ -56,10 +128,9 @@ class QuickReply extends Component {
             } else if (qr.content_type === 'friendly_name') {
               return (
                 <div key={i} style={comStyles().quickreply}>
-                  <p>{ qr.title }</p>
-                  <Input
-                    placeholder='Enter Friendly Name'
-                  />
+                  {
+                    this.renderFriendlyNameInput(qr)
+                  }
                 </div>
               )
             } else if (qr.content_type === 'text') {
@@ -79,11 +150,9 @@ class QuickReply extends Component {
               return (
                 <div key={i} style={comStyles().quickreply}>
                   <p>{ qr.title }</p>
-                  <List>
-                    <Button style={comStyles().selectButton} type='default' size='large'>I have a question about the property</Button>
-                    <Button style={comStyles().selectButton} type='default' size='large'>I want to book a tour!</Button>
-                    <Button style={comStyles().selectButton} type='default' size='large'>Other</Button>
-                  </List>
+                  {
+                    this.renderPurposeSelectionlist()
+                  }
                 </div>
               )
             }
@@ -133,6 +202,8 @@ class QuickReply extends Component {
 QuickReply.propTypes = {
 	history: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
+  identityId: PropTypes.string.isRequired,
+  setInputStateInRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -146,14 +217,14 @@ const RadiumHOC = Radium(QuickReply)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    identityId: redux.auth.identityId,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    setInputStateInRedux,
 	})(RadiumHOC)
 )
 
