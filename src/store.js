@@ -10,7 +10,7 @@ import firebaseCloudMessaging from './middleware/firebaseCloudMessaging-middlewa
 const createStoreWithMiddleware = applyMiddleware(
 	reduxThunk,
 	firebaseCloudMessaging,
-	filteredLogger,
+	// filteredLogger,
 )(createStore);
 // create an instance of the redux store with all our reducers
 const store = createStoreWithMiddleware(
