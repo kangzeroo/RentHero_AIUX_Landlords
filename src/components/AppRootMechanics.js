@@ -13,7 +13,7 @@ import { saveIdentityToRedux } from '../actions/auth/auth_actions'
 export default (ComposedComponent) => {
 	class AppRootMechanics extends Component {
 
-		componentDidMount() {
+		componentWillMount() {
 			// const landlord_id = document.getElementById('root').getAttribute('landlord')
 			// console.log(landlord_id)
 				this.checkIfAlreadyLoggedIn()
