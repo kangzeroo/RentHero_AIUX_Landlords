@@ -11,11 +11,11 @@ import { withRouter } from 'react-router-dom'
 import {
   Rate,
   Avatar,
+  Icon,
   Input,
   List,
   Button,
 } from 'antd'
-
 
 class AIUX extends Component {
 
@@ -62,6 +62,12 @@ class AIUX extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.scroll !== nextProps.scroll) {
+      this.scrollDown()
+    }
+  }
+
   componentDidUpdate() {
     this.scrollDown()
     setTimeout(() => {
@@ -78,8 +84,16 @@ class AIUX extends Component {
 		return (
 			<div id='AIUX' style={comStyles().container}>
         <div style={comStyles().header}>
-          <Avatar src={this.props.representative.thumbnail} />
-          <h1 style={{ color: 'white', marginBottom: '0', }}>{this.props.representative.friendly_name}</h1>
+          <div style={{ width: '20%', }}>
+            <div style={comStyles().font_logo}>RentHero</div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <h2 style={{ color: 'white', marginBottom: '0', fontWeight: 'bold', }}>{this.props.representative.friendly_name}</h2>
+            <p style={{ color: 'white', marginBottom: '0', }}>{ this.props.current_ad.ad_title }</p>
+          </div>
+          <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', }}>
+            <Icon type='ellipsis' style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', }} size='large' />
+          </div>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
           <br />
@@ -102,14 +116,14 @@ class AIUX extends Component {
           */}
           {
             this.htmlHistory.map((_html) => {
-              console.log(_html)
-              // if (_html.fullWidth) {
-              //   return (
-              //     <div key={_html.id} style={messageStyles(_html.sender).container}>
-              //       { _html.com }
-              //     </div>
-              //   )
-              // } else {
+              if (_html.com.props && _html.com.props.data && _html.com.props.data.message && (!_html.com.props.data.message.text || (_html.com.props.data.message.text && _html.com.props.data.message.text === ''))) {
+                console.log('Bastardized content: ', _html)
+                return (
+                  <div key={_html.id}>
+                    <div style={{ marginLeft: '60px', }}>{_html.com}</div>
+                  </div>
+                )
+              } else {
                 return (
                   <div key={_html.id} style={messageStyles(_html.sender).container}>
                     <div style={messageStyles(_html.sender).message}>
@@ -118,22 +132,22 @@ class AIUX extends Component {
                         ?
                         null
                         :
-                        <Avatar src={this.props.representative.thumbnail} shape='circle' size='large' />
+                        <Avatar src={this.props.representative.thumbnail} shape='circle' size='large' style={comStyles().avatarSize} />
                       }
-                      <div style={{ margin: '0px 10px' }}>
+                      <div style={{ padding: '0px 10px' }}>
                         {_html.com}
                       </div>
                       {
                         _html.sender === 'user'
                         ?
-                        <Avatar icon='user' shape='circle' size='large' />
+                        <Avatar icon='user' shape='circle' size='large' style={comStyles().avatarSize, { background: 'none' }} />
                         :
                         null
                       }
                     </div>
                   </div>
                 )
-              // }
+              }
             })
           }
         </div>
@@ -163,6 +177,8 @@ AIUX.propTypes = {
   htmlInput: PropTypes.object,      // passed in
   input: PropTypes.object.isRequired,
   representative: PropTypes.object.isRequired,
+  current_ad: PropTypes.object.isRequired,
+  scroll: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -182,6 +198,7 @@ const mapReduxToProps = (redux) => {
 	return {
     input: redux.chat.input,
     representative: redux.advertisements.representative,
+    current_ad: redux.advertisements.current_ad,
 	}
 }
 
@@ -202,6 +219,12 @@ const comStyles = () => {
       flexDirection: 'column',
       width: '100%',
       height: '100%',
+      // backgroundImage: 'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)',
+
+      backgroundImage: 'linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%)',
+
+      // backgroundImage: 'linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)',
+
       // padding: '0px 20px 0px 20px',
       // margin: '10px',
       // background: '#56CCF2',  /* fallback for old browsers */
@@ -213,17 +236,18 @@ const comStyles = () => {
     },
     header: {
       display: 'flex',
-      // flexDirection: 'column',
-      justifyContent: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
       color: 'white',
-      height: '7vh',
+      height: '8vh',
       minWidth: '100%',
       maxWidth: '100%',
+      padding: '10px',
       // flexGrow: 1,
-      background: '#56CCF2',  /* fallback for old browsers */
-      background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
-      background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      // background: '#56CCF2',  /* fallback for old browsers */
+      // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
+      // background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     },
     botFeed: {
       display: 'flex',
@@ -233,8 +257,8 @@ const comStyles = () => {
       minWidth: '100%',
       maxWidth: '100%',
       flexGrow: 16,
-      backgroundColor: 'white',
-      maxHeight: '93vh',
+      // backgroundColor: 'white',
+      maxHeight: '92vh',
       overflowY: 'scroll',
       // background: '#56CCF2',  /* fallback for old browsers */
       // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
@@ -257,7 +281,20 @@ const comStyles = () => {
       alignItems: 'space-between',
       width: '100%',
       padding: '5px',
-    }
+    },
+    avatarSize: {
+      minWidth: '40px',
+      maxWidth: '40px',
+      minHeight: '40px',
+      maxHeight: '40px',
+    },
+    font_logo: {
+      fontSize: '1.0REM',
+      color: 'white',
+      fontWeight: 'bold',
+      fontFamily: `'Carter One', cursive`,
+      cursor: 'pointer',
+    },
 	}
 }
 
@@ -267,7 +304,7 @@ const inputStyles = (flexGrow = 0) => {
       minWidth: '100%',
       maxWidth: '100%',
       // flexGrow: flexGrow,
-      backgroundColor: 'aliceblue',
+      // backgroundColor: 'aliceblue',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -291,6 +328,6 @@ const messageStyles = (sender) => {
       display: 'flex',
       flexDirection: 'row',
       margin: '10px',
-    }
+    },
   }
 }

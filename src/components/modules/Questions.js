@@ -56,6 +56,7 @@ class Questions extends Component {
             visibleIndex: index + 1,
             saveIndex: this.state.saveIndex + 1,
           })
+          this.props.scrollDown()
         })
     } else {
       saveQualificationAnswer(this.props.identityId, question.question_id, this.state.answers[index - 1])
@@ -167,11 +168,13 @@ Questions.propTypes = {
   identityId: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,        // passed in
   onDone: PropTypes.func,                   // passed in
+  scrollDown: PropTypes.func,               // passed in
 }
 
 // for all optional props, define a default value
 Questions.defaultProps = {
   onDone: () => {},
+  scrollDown: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -202,9 +205,9 @@ const comStyles = () => {
 		},
     quickreply: {
       backgroundColor: 'aliceblue',
-      padding: '10px',
-      borderRadius: '10px',
-      margin: '5px 0px'
+      padding: '20px',
+      borderRadius: '20px',
+      margin: '15px 0px'
     },
 	}
 }

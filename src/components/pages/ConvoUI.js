@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import {
@@ -36,6 +37,8 @@ class ConvoUI extends Component {
 
 
 			loading: true,
+
+			scroll: '',
 		}
 		this.feedInObserverable = null
 		this.feedInObserver = null
@@ -229,6 +232,12 @@ class ConvoUI extends Component {
 			})
 	}
 
+	scrollDown() {
+		this.setState({
+			scroll: uuid.v4()
+		})
+	}
+
 	getRepresentativeForAd() {
 		getRepForProperty(this.props.ad_id)
 			.then((data) => {
@@ -294,7 +303,7 @@ class ConvoUI extends Component {
 			.then((msg) => {
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.completedQualification()} />),
+					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.completedQualification()} scrollDown={() => this.scrollDown()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
 				})
 			})
@@ -336,6 +345,7 @@ class ConvoUI extends Component {
 						htmlBotComp={this.state.nextHtmlBotComp}
 						htmlUserComp={this.state.nextHtmlUserComp}
 						htmlInput={this.state.nextHtmlInput}
+						scroll={this.state.scroll}
 					/>
 				</div>
 			)

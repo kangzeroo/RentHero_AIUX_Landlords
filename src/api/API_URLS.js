@@ -4,8 +4,8 @@
 // LOCAL
 
 // DEV
-// export const DIALOGFLOW_MS = 'https://013935b2.ngrok.io'
-// export const FCM_MS = 'https://24f26d71.ngrok.io'
+// export const DIALOGFLOW_MS = 'https://b346ceb7.ngrok.io'
+// export const FCM_MS = 'https://499c946c.ngrok.io'
 // export const TENANT_AD_MS = 'https://localhost:8202'
 
 // STAGING
