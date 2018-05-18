@@ -96,7 +96,7 @@ class LocationsComponent extends Component {
               {
                 this.state.current_location.photos && this.state.current_location.photos.length > 0
                 ?
-                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=100&photoreference=${this.state.current_location.photos[0].photo_reference}&key=AIzaSyCh3Q0Z_1WFRpRrpNz-j1h81wp9EyuNuhg`} />
+                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=100&photoreference=${this.state.current_location.photos[0].photo_reference}&key=AIzaSyCh3Q0Z_1WFRpRrpNz-j1h81wp9EyuNuhg`} style={{ borderRadius: '0px 0px 0px 20px' }} />
                 :
                 <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }} >
                   <Icon type="minus-circle-o" style={{ fontSize: '3rem', color: 'white' }} />
@@ -158,14 +158,14 @@ const comStyles = () => {
       // flexDirection: 'row',
       height: '350px',
       width: '80vw',
-      // borderRadius: '20px',
+      borderRadius: '20px',
       position: 'relative',
 		},
     map: {
       height: '100%',
       width: '100%',
       zIndex: 20,
-      // borderRadius: '20px',
+      borderRadius: '20px',
     },
     mapDetails: {
       position: 'absolute',
@@ -177,7 +177,7 @@ const comStyles = () => {
       width: '100%',
       padding: '10px',
       zIndex: 23,
-      // borderRadius: '0px 0px 20px 20px',
+      borderRadius: '0px 0px 20px 20px',
     }
 	}
 }

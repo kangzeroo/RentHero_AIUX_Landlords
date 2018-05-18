@@ -62,6 +62,10 @@ class QuickReply extends Component {
         email: contact.email,
       })
     }
+    this.props.setInputStateInRedux({
+      show_input: true,
+      input_placeholder: 'Ask me a question!',
+    })
   }
 
   saveFriendlyName() {
@@ -142,20 +146,15 @@ class QuickReply extends Component {
           size='large'
           onClick={() => this.initiateQuestioning()}
           disabled={this.state.clickedPurpose && this.state.purpose !== 'question'}
-          >I have a question about the property</Button>
+          >{ screen.width < 450 ? 'I have a property question' : 'I have a question about the property'}</Button>
+        <div style={{ height: '10px' }} />
         <Button
           style={comStyles().selectButton}
           type='default'
           size='large'
           onClick={() => this.initiateInterest()}
           disabled={this.state.clickedPurpose && this.state.purpose !== 'interested'}
-          >I want to book a tour!</Button>
-        <Button
-          style={comStyles().selectButton}
-          type='default'
-          size='large'
-          disabled={this.state.clickedPurpose && this.state.purpose !== 'other'}
-          >Other</Button>
+          >I want to book a viewing</Button>
       </List>
     )
   }
@@ -337,14 +336,14 @@ class QuickReply extends Component {
             speed={0.25}
             text={this.props.data.message.message}
             textStyles={{
-              color: 'black',
+              // color: 'black',
               textAlign: 'left',
             }}
             containerStyles={{
-              width: '100%',
+              maxWidth: '90%',
               backgroundColor: 'aliceblue',
-              borderRadius: '10px',
-              padding: '10px',
+              borderRadius: '20px',
+              padding: '20px',
               margin: '5px 0px',
             }}
             doneEvent={() => {
@@ -357,6 +356,7 @@ class QuickReply extends Component {
           :
           null
         }
+        <div style={{ height: '3px', width: '100%' }} />
         {
           this.state.textLoaded || this.props.data.message.message.length === 0
           ?
@@ -419,12 +419,16 @@ const comStyles = () => {
 		},
     quickreply: {
       backgroundColor: 'aliceblue',
-      padding: '10px',
-      borderRadius: '10px',
-      margin: '5px 0px'
+      padding: '20px',
+      borderRadius: '20px',
+      margin: '5px 0px',
+      maxWidth: '90%'
     },
     selectButton: {
       width: '100%',
+      borderRadius: '20px',
+      border: '#2faded solid 2px',
+      color: '#2faded',
     }
 	}
 }

@@ -63,35 +63,9 @@ class GenerateBotHTML extends Component {
           <Questions
             data={this.props.data}
             onDone={() => this.props.onDone()}
+            scrollDown={() => this.props.scrollDown()}
           />
         )
-      } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
-        return (
-          <SubtitlesMachine
-            speed={0.25}
-            text={this.props.data.message.text}
-            textStyles={{
-              // fontSize: '1.3rem',
-              color: 'black',
-              textAlign: 'left',
-            }}
-            containerStyles={{
-              width: '80%',
-              backgroundColor: 'aliceblue',
-              padding: '10px',
-              borderRadius: '10px',
-            }}
-            doneEvent={() => {
-              console.log('DONE')
-              this.props.onDone()
-            }}
-          />
-        )
-        // return (
-        //   <QuickMessage
-        //     text={this.props.data.message.text}
-        //   />
-      // )
       } else if (this.props.data.message.payload.type === 'location') {
         return (
           <MapComponent
@@ -108,28 +82,65 @@ class GenerateBotHTML extends Component {
           />
         )
       }
-    } else {
+    } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
+      console.log('TEXT 1')
       return (
-      <SubtitlesMachine
-        speed={0.25}
-        text={this.props.data.message.text}
-        textStyles={{
-          // fontSize: '1.3rem',
-          color: 'black',
-          textAlign: 'left',
-        }}
-        containerStyles={{
-          width: '80%',
-          backgroundColor: 'aliceblue',
-          padding: '10px',
-          borderRadius: '10px',
-        }}
-        doneEvent={() => {
-          console.log('DONE')
-          this.props.onDone()
-        }}
-      />)
+        <SubtitlesMachine
+          speed={0.25}
+          text={this.props.data.message.text}
+          textStyles={{
+            // fontSize: '1.3rem',
+            // color: 'black',
+            textAlign: 'left',
+          }}
+          containerStyles={{
+            width: '100%',
+            backgroundColor: 'aliceblue',
+            padding: '20px',
+            borderRadius: '20px',
+          }}
+          doneEvent={() => {
+            console.log('DONE')
+            this.props.onDone()
+          }}
+        />
+      )
+      // return (
+      //   <QuickMessage
+      //     text={this.props.data.message.text}
+      //   />
+      // )
     }
+
+    // else {
+    //     return (
+    //       <SubtitlesMachine
+    //         speed={0.25}
+    //         text={this.props.data.message.text}
+    //         textStyles={{
+    //           // fontSize: '1.3rem',
+    //           color: 'black',
+    //           textAlign: 'left',
+    //         }}
+    //         containerStyles={{
+    //           width: '80%',
+    //           backgroundColor: 'aliceblue',
+    //           padding: '10px',
+    //           borderRadius: '10px',
+    //         }}
+    //         doneEvent={() => {
+    //           console.log('DONE')
+    //           this.props.onDone()
+    //         }}
+    //       />
+    //     )
+    //
+    //   // return (
+    //   //   <QuickMessage
+    //   //     text={this.props.data.message.text}
+    //   //   />
+    //   // )
+    // }
   }
 
 	render() {
@@ -148,6 +159,7 @@ GenerateBotHTML.propTypes = {
   onDone: PropTypes.func,             // passed in
   onSubmit: PropTypes.func,           // passed in
   initQualify: PropTypes.func,        // passed in
+  scrollDown: PropTypes.func,         // psased in
 }
 
 // for all optional props, define a default value
@@ -155,6 +167,7 @@ GenerateBotHTML.defaultProps = {
   onDone: () => {},
   onSubmit: () => {},
   initQualify: () => {},
+  scrollDown: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
