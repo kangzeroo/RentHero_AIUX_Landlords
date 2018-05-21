@@ -1,5 +1,6 @@
 // actions related to the app
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
+export const SHOW_INTEREST = 'SHOW_INTEREST'
 
 // actions related to FCM
 export const REQUEST_NOTIFICATIONS_PERMISSION = 'REQUEST_NOTIFICATIONS_PERMISSION'

@@ -13,9 +13,10 @@ import {
   Icon,
   message,
   Dropdown,
+  Button,
   Menu,
 } from 'antd'
-
+import { showInterest } from '../../actions/app/app_actions'
 
 class GenerateInput extends Component {
 
@@ -34,6 +35,11 @@ class GenerateInput extends Component {
     } else {
       message.error('Please input something...')
     }
+  }
+
+  clickedHeart() {
+    this.props.onSubmit(`I'm interested in the property`)
+    this.props.showInterest()
   }
 
 	render() {
@@ -60,7 +66,7 @@ class GenerateInput extends Component {
         <Dropdown overlay={menu} placement='topLeft' trigger={['click']}>
           <Icon
             type='plus'
-            style={{ color: 'lightgray', fontWeight: 'bold', fontSize: '1.2rem', position: 'absolute', left: '50px', zIndex: 99999 }}
+            style={{ color: 'lightgray', fontWeight: 'bold', fontSize: '1.2rem', position: 'absolute', left: '50px', zIndex: 20 }}
           />
         </Dropdown>
         <Input
@@ -72,13 +78,28 @@ class GenerateInput extends Component {
           placeholder={this.props.input.input_placeholder}
           onPressEnter={() => this.submitText()}
           size='large'
-          style={{ width: '100%', borderRadius: '20px', padding: '20px 20px 20px 60px', border: 'none', background: 'aliceblue' }}
+          style={comStyles().inputContainer}
         />
-        <Icon
-          type='heart'
-          style={{ color: 'lightgray', position: 'absolute', right: '50px', fontSize: '1.2rem' }}
-          onClick={() => this.props.onSubmit(`I'm interested in the property`)}
-        />
+        {
+          this.state.input_text.length > 0
+          ?
+          <Button type='primary' onClick={() => this.submitText()} style={{ position: 'absolute', right: '50px', }}>
+            SEND
+          </Button>
+          :
+          <div style={{ color: 'lightgray', position: 'absolute', right: '50px', fontSize: '1.2rem' }}>
+          {
+            this.props.showed_interest
+            ?
+            null
+            :
+            <Icon
+              type='heart'
+              onClick={() => this.clickedHeart()}
+            />
+          }
+          </div>
+        }
 			</div>
 		)
 	}
@@ -90,6 +111,8 @@ GenerateInput.propTypes = {
   data: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   input: PropTypes.object.isRequired,
+  showed_interest: PropTypes.bool.isRequired,
+  showInterest: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -104,20 +127,31 @@ const RadiumHOC = Radium(GenerateInput)
 const mapReduxToProps = (redux) => {
 	return {
     input: redux.chat.input,
+    showed_interest: redux.app.showed_interest,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    showInterest,
 	})(RadiumHOC)
 )
 
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (type) => {
+  let attrs
+  if (type === 'send_button') {
+    attrs = {
+      padding: '20px 100px 20px 60px',
+    }
+  } else {
+    attrs = {
+      padding: '20px 60px 20px 60px',
+    }
+  }
 	return {
 		container: {
       display: 'flex',
@@ -126,6 +160,13 @@ const comStyles = () => {
       alignItems: 'center',
       margin: '10px 20px',
       width: '100%',
-		}
+		},
+    inputContainer: {
+      width: '100%',
+      borderRadius: '20px',
+      border: 'none',
+      height: '50px',
+      ...attrs,
+    }
 	}
 }

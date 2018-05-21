@@ -9,7 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
 
-} from 'antd-mobile'
+} from 'antd'
 
 
 class SubtitlesMachine extends Component {
