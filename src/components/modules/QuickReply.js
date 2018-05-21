@@ -46,6 +46,8 @@ class QuickReply extends Component {
       contact_incomplete: false,
       saving_contact: false,
       contact_updated: false,
+
+      firstRender: true,
     }
   }
 
@@ -69,6 +71,10 @@ class QuickReply extends Component {
   }
 
   saveFriendlyName() {
+    this.props.setInputStateInRedux({
+      show_input: false,
+      input_placeholder: 'Ask me a question!',
+    })
     this.setState({
       pressedEnterName: true,
     }, () => {
@@ -77,6 +83,10 @@ class QuickReply extends Component {
           message.success(data.message)
           this.setState({
             savedFriendlyName: true,
+          })
+          this.props.setInputStateInRedux({
+            show_input: true,
+            input_placeholder: 'Ask me a question!',
           })
         })
         .catch((err) => {
@@ -145,7 +155,6 @@ class QuickReply extends Component {
           type='default'
           size='large'
           onClick={() => this.initiateQuestioning()}
-          disabled={this.state.clickedPurpose && this.state.purpose !== 'question'}
           >{ screen.width < 450 ? 'I have a property question' : 'I have a question about the property'}</Button>
         <div style={{ height: '10px' }} />
         <Button
@@ -153,7 +162,6 @@ class QuickReply extends Component {
           type='default'
           size='large'
           onClick={() => this.initiateInterest()}
-          disabled={this.state.clickedPurpose && this.state.purpose !== 'interested'}
           >I want to book a viewing</Button>
       </List>
     )
@@ -193,10 +201,15 @@ class QuickReply extends Component {
   }
 
   renderAcquireContact(qr) {
-    this.props.setInputStateInRedux({
-      show_input: false,
-      input_placeholder: '',
-    })
+    if (this.state.firstRender) {
+      this.props.setInputStateInRedux({
+        show_input: false,
+        input_placeholder: '',
+      })
+      this.setState({
+        firstRender: false,
+      })
+    }
     if (this.state.contact_updated) {
       return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '10px', }}>
@@ -259,7 +272,7 @@ class QuickReply extends Component {
                 onPressEnter={() => this.updateContactDetails()}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ margin: 0 }}>
               <Button type='primary' onClick={() => this.updateContactDetails()} loading={this.state.saving_contact} disabled={this.state.saving_contact}>
                 CONFIRM
               </Button>

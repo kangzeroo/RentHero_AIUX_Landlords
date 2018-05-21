@@ -67,18 +67,17 @@ class LocationsComponent extends Component {
         map: map,
         icon: this.red_map_pin,
         title: n.formatted_address,
-        animation: google.maps.Animation.DROP,
         zIndex: 1,
       })
       marker.addListener('click', (event) => {
         this.setState({
           current_location: n,
         }, () => console.log(this.state.current_location))
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null)
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE)
-        }
+        // if (marker.getAnimation() !== null) {
+        //   marker.setAnimation(null)
+        // } else {
+        //   marker.setAnimation(google.maps.Animation.BOUNCE)
+        // }
       })
       // marker.label = n.formatted_address
     })
@@ -96,7 +95,7 @@ class LocationsComponent extends Component {
               {
                 this.state.current_location.photos && this.state.current_location.photos.length > 0
                 ?
-                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=100&photoreference=${this.state.current_location.photos[0].photo_reference}&key=AIzaSyCh3Q0Z_1WFRpRrpNz-j1h81wp9EyuNuhg`} style={{ borderRadius: '0px 0px 0px 20px' }} />
+                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxheight=100&maxwidth=100&photoreference=${this.state.current_location.photos[0].photo_reference}&key=AIzaSyCh3Q0Z_1WFRpRrpNz-j1h81wp9EyuNuhg`} style={{ borderRadius: '0px 0px 0px 20px' }} />
                 :
                 <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }} >
                   <Icon type="minus-circle-o" style={{ fontSize: '3rem', color: 'white' }} />
@@ -104,7 +103,7 @@ class LocationsComponent extends Component {
                 </div>
               }
               <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}>
-                <h2 style={{ color: 'white' }}>{ this.state.current_location.name }</h2>
+                <p style={{ color: 'white' }}>{ this.state.current_location.name }</p>
                 <p>{ this.state.current_location.formatted_address }</p>
                 <Rate value={this.state.current_location.rating} />
               </div>

@@ -48,7 +48,15 @@ class ConvoUI extends Component {
 		this.initObservable()
 		this.listenFCM()
 		this.listenToVisibility()
-		this.initializeAdAndDialogflow()
+		if (this.props.identityId && this.props.identityId.length > 0) {
+			this.initializeAdAndDialogflow(this.props.identityId)
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.identityId !== nextProps.identityId) {
+			this.initializeAdAndDialogflow(nextProps.identityId)
+		}
 	}
 
 	initObservable() {
@@ -188,7 +196,8 @@ class ConvoUI extends Component {
 		}, 5000)
 	}
 
-	initializeAdAndDialogflow() {
+	initializeAdAndDialogflow(identityId) {
+		console.log('initializeAdAndDialogflow')
 		getAdvertisement(this.props.ad_id)
 		.then((data) => {
 			// console.log(data)
@@ -203,7 +212,8 @@ class ConvoUI extends Component {
 		.then(() => {
 			// console.log(this.props.representative)
 			// console.log(this.props.identityId)
-			this.initiateDialogFlow(this.props.identityId, this.props.representative.bot_id)
+			console.log('initiateDialogFlow: ', identityId, this.props.representative.bot_id)
+			this.initiateDialogFlow(identityId, this.props.representative.bot_id)
 		})
 		.catch((err) => {
 			console.log(err)

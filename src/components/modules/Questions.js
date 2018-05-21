@@ -15,6 +15,7 @@ import {
 } from 'antd'
 import SubtitlesMachine from './SubtitlesMachine'
 import { saveQualificationAnswer } from '../../api/leads/leads_api'
+import { setInputStateInRedux } from '../../actions/chat/chat_actions'
 
 class Questions extends Component {
 
@@ -31,7 +32,10 @@ class Questions extends Component {
   }
 
   componentWillMount() {
-    console.log('QUESTIONSSSSS')
+    this.props.setInputStateInRedux({
+      show_input: false,
+      input_placeholder: 'Ask me a question!',
+    })
   }
 
   componentDidUpdate() {
@@ -166,6 +170,7 @@ class Questions extends Component {
 Questions.propTypes = {
 	history: PropTypes.object.isRequired,
   identityId: PropTypes.string.isRequired,
+  setInputStateInRedux: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,        // passed in
   onDone: PropTypes.func,                   // passed in
   scrollDown: PropTypes.func,               // passed in
@@ -190,7 +195,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    setInputStateInRedux,
 	})(RadiumHOC)
 )
 
@@ -207,7 +212,8 @@ const comStyles = () => {
       backgroundColor: 'aliceblue',
       padding: '20px',
       borderRadius: '20px',
-      margin: '15px 0px'
+      margin: '15px 0px',
+      width: '90%',
     },
 	}
 }
