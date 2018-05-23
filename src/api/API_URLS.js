@@ -4,10 +4,10 @@
 // LOCAL
 
 // DEV
-// export const DIALOGFLOW_MS = 'https://2d818ab3.ngrok.io'
-// export const FCM_MS = 'https://49c1b0ff.ngrok.io'
+// export const DIALOGFLOW_MS = 'https://5422210e.ngrok.io'
+// export const FCM_MS = 'https://b7125321.ngrok.io'
 // export const TENANT_AD_MS = 'https://localhost:8202'
-//
+
 
 // STAGING
 export const DIALOGFLOW_MS = 'https://renthero.host:8302'

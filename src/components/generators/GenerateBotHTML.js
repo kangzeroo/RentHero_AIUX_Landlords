@@ -56,13 +56,20 @@ class GenerateBotHTML extends Component {
         )
       } else if (this.props.data.message.payload.quick_replies) {
         return (
-          <QuickReply data={this.props.data} submitMessage={(t) => this.props.onSubmit(t)} initQualification={() => this.props.initQualify()} />
+          <QuickReply
+            data={this.props.data}
+            submitMessage={(t) => this.props.onSubmit(t)}
+            initQualification={() => this.props.initQualify()}
+            onQualified={() => this.props.onQualified()}
+            scrollDown={() => this.props.scrollDown()}
+            requestedTour={(tour_id) => this.props.requestedTour(tour_id)}
+          />
         )
       } else if (this.props.data.message.payload.questions) {
         return (
           <Questions
             data={this.props.data}
-            onDone={() => this.props.onDone()}
+            onQualified={() => this.props.onQualified()}
             scrollDown={() => this.props.scrollDown()}
           />
         )
@@ -125,6 +132,8 @@ GenerateBotHTML.propTypes = {
   onSubmit: PropTypes.func,           // passed in
   initQualify: PropTypes.func,        // passed in
   scrollDown: PropTypes.func,         // psased in
+  onQualified: PropTypes.func,        // passed in
+  requestedTour: PropTypes.func,      // passed in
 }
 
 // for all optional props, define a default value
@@ -133,6 +142,8 @@ GenerateBotHTML.defaultProps = {
   onSubmit: () => {},
   initQualify: () => {},
   scrollDown: () => {},
+  onQualified: () => {},
+  requestedTour: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling

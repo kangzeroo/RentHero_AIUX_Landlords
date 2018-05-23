@@ -57,3 +57,17 @@ export const getQualificationStatus = (session_id, identity_id, ad_id) => {
   })
   return p
 }
+
+export const requestTour = (ad_id, identity_id, requested_for) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${TENANT_AD_MS}/request_tour`, { ad_id, identity_id, requested_for, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
