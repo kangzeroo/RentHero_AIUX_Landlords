@@ -17,6 +17,7 @@ import {
   List,
   Button,
 } from 'antd'
+import ThumbsVoter from '../feedback/thumbs/ThumbsVoter'
 
 class AIUX extends Component {
 
@@ -35,7 +36,8 @@ class AIUX extends Component {
       this.htmlHistory.push({
         id: uuid.v4(),
         sender: 'ai',
-        com: this.props.htmlBotComp
+        com: this.props.htmlBotComp,
+        messageID: this.props.messageID,
       })
     }
   }
@@ -47,7 +49,7 @@ class AIUX extends Component {
         this.htmlHistory.push({
           id: uuid.v4(),
           sender: 'user',
-          com: prevProps.htmlUserComp
+          com: prevProps.htmlUserComp,
         })
       }
     }
@@ -58,6 +60,8 @@ class AIUX extends Component {
           id: uuid.v4(),
           sender: 'ai',
           com: prevProps.htmlBotComp,
+          messageID: prevProps.messageID,
+          // fullWidth: prevProps.htmlBotComp.props.data.message.payload.type === 'locations',
         })
       }
     }
@@ -93,7 +97,7 @@ class AIUX extends Component {
             <p style={{ color: 'white', marginBottom: '0', }}>{ this.props.current_ad.ad_title }</p>
           </div>
           <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', }}>
-            <Icon type='ellipsis' style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', }} size='large' />
+            <Icon type='ellipsis' onClick={() => console.log('ELLIPSIS CLICKED!')} style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', cursor: 'pointer' }} size='large' />
           </div>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
@@ -145,6 +149,15 @@ class AIUX extends Component {
                       {
                         _html.sender === 'user'
                         ?
+                        null
+                        :
+                        <ThumbsVoter
+                          messageID={_html.messageID}
+                        />
+                      }
+                      {
+                        _html.sender === 'user'
+                        ?
                         <Avatar icon='user' shape='circle' size='large' style={comStyles().avatarSize, { background: 'none', border: 'white solid thin' }} />
                         :
                         null
@@ -180,6 +193,10 @@ AIUX.propTypes = {
   htmlBotComp: PropTypes.object,       // passed in
   htmlUserComp: PropTypes.object,   // passed in
   htmlInput: PropTypes.object,      // passed in
+  messageID: PropTypes.string,      // passed in
+  messageText: PropTypes.string,    // passed in
+  intentID: PropTypes.string,  // passed in
+  intentName: PropTypes.string,    // passed in
   input: PropTypes.object.isRequired,
   representative: PropTypes.object.isRequired,
   current_ad: PropTypes.object.isRequired,
@@ -334,5 +351,45 @@ const messageStyles = (sender) => {
       flexDirection: 'row',
       margin: '10px',
     },
+  }
+}
+
+
+const thumbStyles = () => {
+  const thumb = {
+    opacity: 0.5,
+    cursor: 'pointer',
+    height: '25px',
+    width: 'auto',
+    margin: '5px',
+    ':hover': {
+      opacity: 0.8,
+      WebkitFilter: 'brightness(200%)',
+      WebkitTransition: 'all 1s ease',
+      MozTransition: 'all 1s ease',
+      OTransition: 'all 1s ease',
+      MsTransition: 'all 1s ease',
+      transition: 'all 1s ease',
+    }
+  }
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+    },
+    up: {
+      ...thumb,
+    },
+    down: {
+      ...thumb,
+      MozTransform: 'scaleX(-1)',
+      OTransform: 'scaleX(-1)',
+      WebkitTransform: 'scaleX(-1)',
+      transform: 'scaleX(-1)',
+      filter: 'FlipH',
+      MsFilter: 'FlipH',
+    }
   }
 }
