@@ -31,6 +31,9 @@ class ConvoUI extends Component {
 		super()
 		this.state = {
 			session_id: '',
+
+			messageID: '',					 // messageID will change every time this.state.nextHtmlBotComp is changed
+
 			nextHtmlBotComp: null,
 			nextHtmlUserComp: null,
 			nextHtmlInput: null,
@@ -63,141 +66,142 @@ class ConvoUI extends Component {
 		this.feedInObserverable = Rx.Observable.create((obs) => {
 			this.feedInObserver = obs
 		}).subscribe({
-			next: ({ nextHtmlUserComp, nextHtmlBotComp, nextHtmlInput }) => {
-	      console.log('OBSERVABLE NEXT')
+			next: ({ nextHtmlUserComp, nextHtmlBotComp, nextHtmlInput, messageID }) => {
+	      // console.log('OBSERVABLE NEXT')
 				this.setState({
 					nextHtmlUserComp,
 					nextHtmlBotComp,
 					nextHtmlInput,
+					messageID,
 				})
 			},
 			error: (err) => {
-				console.log('OBSERVABLE ERROR')
+				// console.log('OBSERVABLE ERROR')
 				console.log(err)
 			},
 			complete: (y) => {
-				console.log('OBSERVABLE COMPLETE')
+				// console.log('OBSERVABLE COMPLETE')
 			}
 		})
 		// this.test()
 	}
 
-	test() {
-		this.setState({
-			nextHtmlBotComp: (<GenerateBotHTML data={{
-				"message":{
-					"payload": {
-				    "attachment":{
-				      "type":"image",
-				      "payload":{
-				        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-				        "is_reusable":true
-				      }
-				    }
-					}
-			  }
-			}} />)
-		})
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"payload": {
-					    "attachment":{
-					      "type":"video",
-					      "payload":{
-					        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
-					        "is_reusable":true
-					      }
-					    }
-						}
-				  }
-				}} />)
-			})
-		}, 1000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"payload": {
-					    "attachment":{
-					      "type":"file",
-					      "payload":{
-					        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
-					        "is_reusable":true
-					      }
-					    }
-						}
-				  }
-				}} />)
-			})
-		}, 2000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"payload": {
-					    "attachment":{
-					      "type":"file",
-					      "payload":{
-					        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
-					        "is_reusable":true
-					      }
-					    }
-						}
-				  }
-				}} />)
-			})
-		}, 3000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"payload": {
-					    "attachment":{
-					      "type":"audio",
-					      "payload":{
-					        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
-					        "is_reusable":true
-					      }
-					    }
-						}
-				  }
-				}} />)
-			})
-		}, 4000)
-		setTimeout(() => {
-			this.setState({
-				nextHtmlBotComp: (<GenerateBotHTML data={{
-					"message":{
-						"text": "Here is a quick reply! Please select an option.",
-						"payload": {
-					    "quick_replies":[
-					      {
-					        "content_type":"text",
-					        "title":"Option 1",
-					        "payload":"<POSTBACK_PAYLOAD>",
-					        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
-					      },
-					      {
-					        "content_type":"user_phone_number"
-					      },
-					      {
-					        "content_type":"user_email"
-					      },
-					      {
-					        "content_type":"location"
-					      },
-					    ]
-						}
-				  }
-				}} />)
-			})
-		}, 5000)
-	}
+	// test() {
+	// 	this.setState({
+	// 		nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 			"message":{
+	// 				"payload": {
+	// 			    "attachment":{
+	// 			      "type":"image",
+	// 			      "payload":{
+	// 			        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+	// 			        "is_reusable":true
+	// 			      }
+	// 			    }
+	// 				}
+	// 		  }
+	// 		}} />)
+	// 	})
+	// 	setTimeout(() => {
+	// 		this.setState({
+	// 			nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 				"message":{
+	// 					"payload": {
+	// 				    "attachment":{
+	// 				      "type":"video",
+	// 				      "payload":{
+	// 				        "url":"https://www.youtube.com/embed/UCmPmkHqHXk",
+	// 				        "is_reusable":true
+	// 				      }
+	// 				    }
+	// 					}
+	// 			  }
+	// 			}} />)
+	// 		})
+	// 	}, 1000)
+	// 	setTimeout(() => {
+	// 		this.setState({
+	// 			nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 				"message":{
+	// 					"payload": {
+	// 				    "attachment":{
+	// 				      "type":"file",
+	// 				      "payload":{
+	// 				        "url":"https://www.planetebook.com/free-ebooks/a-tale-of-two-cities.pdf",
+	// 				        "is_reusable":true
+	// 				      }
+	// 				    }
+	// 					}
+	// 			  }
+	// 			}} />)
+	// 		})
+	// 	}, 2000)
+	// 	setTimeout(() => {
+	// 		this.setState({
+	// 			nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 				"message":{
+	// 					"payload": {
+	// 				    "attachment":{
+	// 				      "type":"file",
+	// 				      "payload":{
+	// 				        "url":"https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg",
+	// 				        "is_reusable":true
+	// 				      }
+	// 				    }
+	// 					}
+	// 			  }
+	// 			}} />)
+	// 		})
+	// 	}, 3000)
+	// 	setTimeout(() => {
+	// 		this.setState({
+	// 			nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 				"message":{
+	// 					"payload": {
+	// 				    "attachment":{
+	// 				      "type":"audio",
+	// 				      "payload":{
+	// 				        "url":"http://www.obamadownloads.com/mp3s/dnc-2004-speech.mp3",
+	// 				        "is_reusable":true
+	// 				      }
+	// 				    }
+	// 					}
+	// 			  }
+	// 			}} />)
+	// 		})
+	// 	}, 4000)
+	// 	setTimeout(() => {
+	// 		this.setState({
+	// 			nextHtmlBotComp: (<GenerateBotHTML data={{
+	// 				"message":{
+	// 					"text": "Here is a quick reply! Please select an option.",
+	// 					"payload": {
+	// 				    "quick_replies":[
+	// 				      {
+	// 				        "content_type":"text",
+	// 				        "title":"Option 1",
+	// 				        "payload":"<POSTBACK_PAYLOAD>",
+	// 				        "image_url":"https://cdn.shopify.com/s/files/1/0367/6021/products/Butterfly_Detail_1_1024x1024.jpg?v=1521724181"
+	// 				      },
+	// 				      {
+	// 				        "content_type":"user_phone_number"
+	// 				      },
+	// 				      {
+	// 				        "content_type":"user_email"
+	// 				      },
+	// 				      {
+	// 				        "content_type":"location"
+	// 				      },
+	// 				    ]
+	// 					}
+	// 			  }
+	// 			}} />)
+	// 		})
+	// 	}, 5000)
+	// }
 
 	initializeAdAndDialogflow(identityId) {
-		console.log('initializeAdAndDialogflow')
+		// console.log('initializeAdAndDialogflow')
 		getAdvertisement(this.props.ad_id)
 		.then((data) => {
 			// console.log(data)
@@ -212,7 +216,7 @@ class ConvoUI extends Component {
 		.then(() => {
 			// console.log(this.props.representative)
 			// console.log(this.props.identityId)
-			console.log('initiateDialogFlow: ', identityId, this.props.representative.bot_id)
+			// console.log('initiateDialogFlow: ', identityId, this.props.representative.bot_id)
 			this.initiateDialogFlow(identityId, this.props.representative.bot_id)
 		})
 		.catch((err) => {
@@ -221,11 +225,11 @@ class ConvoUI extends Component {
 	}
 
 	initiateDialogFlow(identityId, botId) {
-		console.log('INITIATING DIALOGFLOW!!!!!')
+		// console.log('INITIATING DIALOGFLOW!!!!!')
 		// console.log(identityId)
 		// console.log(this.props.representative.bot_id)
 		const session_id = localStorage.getItem('session_id')
-		console.log(session_id)
+		console.log(`Session ID: ${session_id}`)
 		initDialogFlow(session_id, this.props.ad_id, identityId, botId)
 			.then((msg) => {
 				console.log(msg)
@@ -234,6 +238,7 @@ class ConvoUI extends Component {
 					session_id: msg.session_id,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} initQualify={() => this.initiateQualification()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					messageID: msg.id,
 					loading: false,
 				})
 				this.props.saveSessionIdToRedux(msg.session_id)
@@ -251,7 +256,7 @@ class ConvoUI extends Component {
 	getRepresentativeForAd() {
 		getRepForProperty(this.props.ad_id)
 			.then((data) => {
-				console.log(data)
+				// console.log(data)
 				this.props.saveBotToRedux(data)
 			})
 			.catch((err) => {
@@ -264,13 +269,14 @@ class ConvoUI extends Component {
 			console.log('Message received. ', payload)
 			const msg = {
 				...payload.notification,
-				message: payload.notification.body
+				message: payload.notification.body,
 			}
-			console.log(msg)
+			// console.log(msg)
 			this.setState({
 				session_id: msg.session_id,
-				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} initQualify={() => this.initiateQualification()} />),
-				nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message }, payload: payload.data }} initQualify={() => this.initiateQualification()} />),
+				nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message }, payload: payload.data }} onSubmit={(t) => this.submitted(t)} />),
+				messageID: payload.data.message_id,
 			})
 		})
 	}
@@ -279,23 +285,25 @@ class ConvoUI extends Component {
 		document.onvisibilitychange = () => {
 			console.log('VISIBILITY CHANGED!')
 			if (!document.hidden) {
-				console.log('getting most recent messages....')
+				// console.log('getting most recent messages....')
 			}
 		}
 	}
 
 	submitted(text) {
-		console.log(text)
+		// console.log(text)
 		this.setState({
 			nextHtmlUserComp: (<UserResponse text={text} />),
 		})
 		// Promise.resolve() represents some API call
 		sendMessageToDialogFlow(text, this.props.session_id, this.props.ad_id, this.props.representative.bot_id, this.props.identityId)
 			.then((msg) => {
+				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} initQualify={() => this.initiateQualification()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					messageID: msg.id,
 				})
 			})
 			.catch((err) => {
@@ -304,17 +312,19 @@ class ConvoUI extends Component {
 	}
 
 	initiateQualification() {
-		console.log('initiateQualification')
+		// console.log('initiateQualification')
 		this.props.setInputStateInRedux({
 			show_input: true,
 			input_placeholder: 'Ask me more questions!',
 		})
 		dialogFlowInitQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
 			.then((msg) => {
+				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.completedQualification()} scrollDown={() => this.scrollDown()} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					messageID: msg.id,
 				})
 			})
 			.catch((err) => {
@@ -323,16 +333,18 @@ class ConvoUI extends Component {
 	}
 
 	nextHtmlBotCompDoneEvent() {
-		console.log('nextHtmlBotCompDoneEvent()')
+		// console.log('nextHtmlBotCompDoneEvent()')
 	}
 
 	completedQualification() {
 		dialogFlowCompleteQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
 			.then((msg) => {
+				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
 					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
 					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					messageID: msg.id,
 				})
 			})
 			.catch((err) => {
@@ -356,6 +368,7 @@ class ConvoUI extends Component {
 						htmlUserComp={this.state.nextHtmlUserComp}
 						htmlInput={this.state.nextHtmlInput}
 						scroll={this.state.scroll}
+						messageID={this.state.messageID}
 					/>
 				</div>
 			)
