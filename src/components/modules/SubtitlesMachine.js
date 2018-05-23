@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
+import uuid from 'uuid'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
@@ -19,7 +20,15 @@ class SubtitlesMachine extends Component {
     this.state = {
       text: '',
       inverse_text: '',
+      divID: uuid.v4(),
+      absDimensions: {}
     }
+  }
+
+  componentWillMount() {
+    this.setState({
+      absDimensions: this.props.containerStyles
+    })
   }
 
   componentDidMount() {
@@ -35,7 +44,32 @@ class SubtitlesMachine extends Component {
   renderAnimation(text) {
     const lex = text.split('')
     let count = 0
-
+    // const textNode = document.createTextNode(this.props.text)
+    const placeNode = document.createElement('div')
+    placeNode.setAttribute('id', 'absText')
+    const textNode = document.createTextNode(this.props.text)
+    placeNode.appendChild(textNode)
+    // textNode.style.visibility = 'hidden'
+    const divID = document.getElementById(this.state.divID)
+    divID.appendChild(textNode)
+    const sub = divID.parentNode
+    const w = sub.offsetWidth
+    const h = sub.offsetHeight
+    // divID.setAttribute('style', 'visibility: hidden;')
+    this.setState({
+      absDimensions: {
+        ...this.props.containerStyles,
+        minHeight: h,
+        minWidth: w,
+        height: h,
+        width: w,
+        maxHeight: h,
+        maxWidth: w,
+      }
+    }, () => {
+      placeNode.remove()
+      divID.remove()
+    })
     const onNext = ({ obs }) => {
       // console.log('OBSERVABLE NEXT')
       let waitTime = 70 * this.props.speed
@@ -78,9 +112,11 @@ class SubtitlesMachine extends Component {
 
 	render() {
 		return (
-			<div id='SubtitlesMachine' style={comStyles({ containerStyles: this.props.containerStyles }).container}>
+			<div id='SubtitlesMachine' style={comStyles({ containerStyles: this.state.absDimensions }).container}>
+        <div id={this.state.divID} style={{ width: 'auto', height: 'auto' }}>
+        </div>
 				<div style={comStyles({ textStyles: this.props.textStyles }).text}>{this.state.text}</div>
-				<div style={comStyles({ textStyles: this.props.textStyles }).inverse_text}>{this.state.inverse_text}</div>
+				{/*<div style={comStyles({ textStyles: this.props.textStyles }).inverse_text}>{this.state.inverse_text}</div>*/}
 			</div>
 		)
 	}
@@ -138,13 +174,13 @@ const comStyles = ({ containerStyles, textStyles }) => {
   }
 	return {
 		container: {
+      ...containerStyles,
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
-      ...containerStyles,
 		},
     text: {
-      ...textStyles
+      ...textStyles,
     },
     inverse_text: {
       ...textStyles,
