@@ -30,9 +30,23 @@ export const updateLeadInfo = (identity_id, first_name, last_name, phone, email)
   return p
 }
 
-export const saveQualificationAnswer = (identity_id, question_id, response) => {
+export const saveQualificationAnswer = (session_id, identity_id, question_id, response) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${TENANT_AD_MS}/save_qualification_answer_for_user`, { identity_id, question_id, response, }, authHeaders())
+    axios.post(`${TENANT_AD_MS}/save_qualification_answer_for_user`, { session_id, identity_id, question_id, response, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const getQualificationStatus = (session_id, identity_id, ad_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${TENANT_AD_MS}/get_qualification_status`, { session_id, identity_id, ad_id, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
