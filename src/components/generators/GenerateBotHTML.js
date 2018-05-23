@@ -83,7 +83,6 @@ class GenerateBotHTML extends Component {
         )
       }
     } else if (this.props.data.message.text && this.props.data.message.text.length > 0) {
-      console.log('TEXT 1')
       return (
         <SubtitlesMachine
           speed={0.25}
@@ -109,6 +108,7 @@ class GenerateBotHTML extends Component {
   }
 
 	render() {
+    console.log(this.props.data)
 		return (
 			<div id='GenerateBotHTML' style={comStyles().container}>
 				{this.generateHTML()}
@@ -162,4 +162,40 @@ const comStyles = () => {
       flexDirection: 'column',
 		}
 	}
+}
+
+const thumbStyles = () => {
+  const thumb = {
+    opacity: 0.5,
+    cursor: 'pointer',
+    ':hover': {
+      opacity: 0.8,
+      WebkitFilter: 'brightness(200%)',
+      WebkitTransition: 'all 1s ease',
+      MozTransition: 'all 1s ease',
+      OTransition: 'all 1s ease',
+      MsTransition: 'all 1s ease',
+      transition: 'all 1s ease',
+    }
+  }
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    up: {
+      ...thumb,
+    },
+    down: {
+      ...thumb,
+      MozTransform: 'scaleX(-1)',
+      OTransform: 'scaleX(-1)',
+      WebkitTransform: 'scaleX(-1)',
+      transform: 'scaleX(-1)',
+      filter: 'FlipH',
+      MsFilter: 'FlipH',
+    }
+  }
 }

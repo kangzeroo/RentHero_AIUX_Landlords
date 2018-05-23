@@ -54,9 +54,9 @@ class QuickReply extends Component {
   }
 
   componentWillMount() {
-    console.log('QUICKREPLY MOUNTED')
-    console.log(this.props.data)
-    console.log(this.props.data.message.text)
+    // console.log('QUICKREPLY MOUNTED')
+    // console.log(this.props.data)
+    // console.log(this.props.data.message.text)
     if (this.props.data.message.payload.quick_replies[0].content_type === 'acquire_contact') {
       const contact = this.props.data.message.payload.quick_replies[0]
       this.setState({
@@ -450,7 +450,7 @@ class QuickReply extends Component {
               margin: '5px 0px',
             }}
             doneEvent={() => {
-              console.log('WOOOO')
+              // console.log('WOOOO')
               this.setState({
                 textLoaded: true
               })

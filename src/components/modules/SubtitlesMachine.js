@@ -116,7 +116,6 @@ class SubtitlesMachine extends Component {
         <div id={this.state.divID} style={{ width: 'auto', height: 'auto' }}>
         </div>
 				<div style={comStyles({ textStyles: this.props.textStyles }).text}>{this.state.text}</div>
-				{/*<div style={comStyles({ textStyles: this.props.textStyles }).inverse_text}>{this.state.inverse_text}</div>*/}
 			</div>
 		)
 	}
