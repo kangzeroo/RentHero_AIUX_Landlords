@@ -53,7 +53,7 @@ class Questions extends Component {
 
   saveAnswerAndMoveOn(question, index) {
     if (index < this.props.data.message.payload.questions.length) {
-      saveQualificationAnswer(this.props.identityId, question.question_id, this.state.answers[index - 1])
+      saveQualificationAnswer(this.props.session_id, this.props.identityId, question.question_id, this.state.answers[index - 1])
         .then((data) => {
           message.success(data.message)
           this.setState({
@@ -63,7 +63,7 @@ class Questions extends Component {
           this.props.scrollDown()
         })
     } else {
-      saveQualificationAnswer(this.props.identityId, question.question_id, this.state.answers[index - 1])
+      saveQualificationAnswer(this.props.session_id, this.props.identityId, question.question_id, this.state.answers[index - 1])
         .then((data) => {
           this.setState({
             saveIndex: this.state.saveIndex + 1,
@@ -98,6 +98,7 @@ class Questions extends Component {
                       placeholder='Enter your answer here.'
                       onPressEnter={() => this.saveAnswerAndMoveOn(question, index + 1)}
                       disabled={index <= this.state.saveIndex}
+                      style={{ borderRadius: '25px' }}
                     />
                   </Form.Item>
                   <Form.Item>
@@ -105,6 +106,7 @@ class Questions extends Component {
                       type='primary'
                       onClick={() => this.saveAnswerAndMoveOn(question, index + 1)}
                       disabled={index <= this.state.saveIndex}
+                      style={{ borderRadius: '25px' }}
                     >
                       {
                         index <= this.state.saveIndex
@@ -171,6 +173,7 @@ Questions.propTypes = {
 	history: PropTypes.object.isRequired,
   identityId: PropTypes.string.isRequired,
   setInputStateInRedux: PropTypes.func.isRequired,
+  session_id: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,        // passed in
   onDone: PropTypes.func,                   // passed in
   scrollDown: PropTypes.func,               // passed in
@@ -189,6 +192,7 @@ const RadiumHOC = Radium(Questions)
 const mapReduxToProps = (redux) => {
 	return {
     identityId: redux.auth.identityId,
+    session_id: redux.auth.session_id,
 	}
 }
 

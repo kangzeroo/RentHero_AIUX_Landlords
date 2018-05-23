@@ -11,15 +11,14 @@ import {
   Input,
   List,
   Button,
-  Divider,
-  Card,
   Form,
   Icon,
+  Progress,
   message,
 } from 'antd'
 import ImageCarousel from './ImageCarousel'
 import SubtitlesMachine from './SubtitlesMachine'
-import { saveFriendlyNameToLeads, updateLeadInfo, } from '../../api/leads/leads_api'
+import { saveFriendlyNameToLeads, updateLeadInfo, getQualificationStatus, } from '../../api/leads/leads_api'
 import { setInputStateInRedux } from '../../actions/chat/chat_actions'
 import { dialogFlowPropertyQuestion, dialogFlowInitQualification, } from '../../api/dialogflow/dialogflow_api'
 
@@ -48,6 +47,9 @@ class QuickReply extends Component {
       contact_updated: false,
 
       firstRender: true,
+
+      qualificationStatus: {},
+      loading: false,
     }
   }
 
@@ -63,6 +65,8 @@ class QuickReply extends Component {
         phone: contact.phone,
         email: contact.email,
       })
+    } else if (this.props.data.message.payload.quick_replies[0].content_type === 'init_qualification') {
+      this.checkQualificationStatus()
     }
     this.props.setInputStateInRedux({
       show_input: true,
@@ -147,6 +151,30 @@ class QuickReply extends Component {
     }
   }
 
+  checkQualificationStatus() {
+    this.setState({
+      loading: true,
+    })
+    getQualificationStatus(this.props.session_id, this.props.identityId, this.props.current_ad.ad_id)
+      .then((data) => {
+        this.setState({
+          qualificationStatus: data,
+          loading: false,
+        })
+        if (data.questions && data.answered) {
+          console.log('congrats, everything has been answered')
+        } else {
+          this.props.initQualification()
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        this.setState({
+          loading: false,
+        })
+      })
+  }
+
   renderPurposeSelectionlist() {
     return (
       <List>
@@ -169,6 +197,15 @@ class QuickReply extends Component {
 
 
   renderFriendlyNameInput(qr) {
+    if (this.state.firstRender) {
+      this.props.setInputStateInRedux({
+        show_input: false,
+        input_placeholder: 'Ask me a question!',
+      })
+      this.setState({
+        firstRender: false,
+      })
+    }
     if (this.state.savedFriendlyName) {
       return (
         <div>
@@ -186,12 +223,15 @@ class QuickReply extends Component {
             <Form.Item
               validateStatus={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'error' : null}
               help={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'Please enter a name we can call you by' : null}
+              style={{ margin: 0, padding: 0, }}
             >
               <Input
+                prefix={<Icon type='user' />}
                 placeholder='Enter Friendly Name'
                 value={this.state.friendlyName}
                 onChange={e => this.setState({ friendlyName: e.target.value })}
                 onPressEnter={() => this.saveFriendlyName()}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
           </Form>
@@ -201,15 +241,6 @@ class QuickReply extends Component {
   }
 
   renderAcquireContact(qr) {
-    if (this.state.firstRender) {
-      this.props.setInputStateInRedux({
-        show_input: false,
-        input_placeholder: '',
-      })
-      this.setState({
-        firstRender: false,
-      })
-    }
     if (this.state.contact_updated) {
       return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '10px', }}>
@@ -233,11 +264,12 @@ class QuickReply extends Component {
                 value={this.state.first_name}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ first_name: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'Please enter a last name' : null}
+              validateStatus={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'Please enter a last name' : null}
             >
               <Input
                 placeholder='Last Name'
@@ -245,11 +277,12 @@ class QuickReply extends Component {
                 value={this.state.last_name}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ last_name: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.phone.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.phone.length === 0 && this.state.contact_incomplete ? 'Please enter a phone number' : null}
+              validateStatus={this.state.phone.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.phone.length === 0 && this.state.contact_incomplete ? 'Please enter a phone number' : null}
             >
               <Input
                 placeholder='Phone Number'
@@ -257,11 +290,12 @@ class QuickReply extends Component {
                 value={this.state.phone}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ phone: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.email.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.email.length === 0 && this.state.contact_incomplete ? 'Please enter an email address' : null}
+              validateStatus={this.state.email.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.email.length === 0 && this.state.contact_incomplete ? 'Please enter an email address' : null}
             >
               <Input
                 placeholder='Email Address'
@@ -270,6 +304,7 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ email: e.target.value })}
                 onPressEnter={() => this.updateContactDetails()}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item style={{ margin: 0 }}>
@@ -281,6 +316,53 @@ class QuickReply extends Component {
         </div>
       )
     }
+  }
+
+  renderQualificationStatus() {
+    const qualificationStatus = this.state.qualificationStatus
+    if (qualificationStatus.questions && qualificationStatus.answered) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Icon type='check-circle' style={{ fontSize: '5REM', color: '#00FF00' }} />
+          <br />
+          <div>{qualificationStatus.message}</div>
+        </div>
+      )
+    } else if (qualificationStatus.questions && !qualificationStatus.answered) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Icon type='exclamation-circle' style={{ fontSize: '5REM', color: '#ffcc00' }} />
+          <br />
+          <div>{qualificationStatus.message}</div>
+        </div>
+      )
+    } else if (!qualificationStatus.question && !qualificationStatus.answered) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Icon type='check-circle' style={{ fontSize: '5REM', color: '#00FF00' }} />
+          <br />
+          <div>{qualificationStatus.message}</div>
+        </div>
+      )
+    }
+  }
+
+  renderCheckQualification(qr) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', }}>
+        {
+          this.state.loading
+          ?
+          <div>
+            <p style={{ margin: 0, padding: 0, }}>{qr.title}</p>
+            <Progress percent={this.state.loading ? 30 : 100} />
+          </div>
+          :
+          this.renderQualificationStatus()
+        }
+        <br />
+      </div>
+    )
   }
 
   renderQuickReplyOptions() {
@@ -329,6 +411,14 @@ class QuickReply extends Component {
                   <p>{ qr.title }</p>
                   {
                     this.renderPurposeSelectionlist()
+                  }
+                </div>
+              )
+            } else if (qr.content_type === 'init_qualification') {
+              return (
+                <div key={i} style={comStyles().quickreply}>
+                  {
+                    this.renderCheckQualification(qr)
                   }
                 </div>
               )
@@ -424,7 +514,7 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (full) => {
 	return {
 		container: {
       display: 'flex',
@@ -435,13 +525,16 @@ const comStyles = () => {
       padding: '20px',
       borderRadius: '20px',
       margin: '5px 0px',
-      maxWidth: '90%'
+      maxWidth: '90%',
     },
     selectButton: {
       width: '100%',
       borderRadius: '20px',
       border: '#2faded solid 2px',
       color: '#2faded',
+    },
+    prettyInput: {
+      borderRadius: '25px !important',
     }
 	}
 }
