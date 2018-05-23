@@ -105,42 +105,7 @@ class GenerateBotHTML extends Component {
           }}
         />
       )
-      // return (
-      //   <QuickMessage
-      //     text={this.props.data.message.text}
-      //   />
-      // )
     }
-
-    // else {
-    //     return (
-    //       <SubtitlesMachine
-    //         speed={0.25}
-    //         text={this.props.data.message.text}
-    //         textStyles={{
-    //           // fontSize: '1.3rem',
-    //           color: 'black',
-    //           textAlign: 'left',
-    //         }}
-    //         containerStyles={{
-    //           width: '80%',
-    //           backgroundColor: 'aliceblue',
-    //           padding: '10px',
-    //           borderRadius: '10px',
-    //         }}
-    //         doneEvent={() => {
-    //           console.log('DONE')
-    //           this.props.onDone()
-    //         }}
-    //       />
-    //     )
-    //
-    //   // return (
-    //   //   <QuickMessage
-    //   //     text={this.props.data.message.text}
-    //   //   />
-    //   // )
-    // }
   }
 
 	render() {

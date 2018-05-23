@@ -11,8 +11,6 @@ import {
   Input,
   List,
   Button,
-  Divider,
-  Card,
   Form,
   Icon,
   message,
@@ -169,6 +167,15 @@ class QuickReply extends Component {
 
 
   renderFriendlyNameInput(qr) {
+    if (this.state.firstRender) {
+      this.props.setInputStateInRedux({
+        show_input: false,
+        input_placeholder: 'Ask me a question!',
+      })
+      this.setState({
+        firstRender: false,
+      })
+    }
     if (this.state.savedFriendlyName) {
       return (
         <div>
@@ -186,12 +193,15 @@ class QuickReply extends Component {
             <Form.Item
               validateStatus={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'error' : null}
               help={this.state.friendlyName.length === 0 && this.state.pressedEnterName ? 'Please enter a name we can call you by' : null}
+              style={{ margin: 0, padding: 0, }}
             >
               <Input
+                prefix={<Icon type='user' />}
                 placeholder='Enter Friendly Name'
                 value={this.state.friendlyName}
                 onChange={e => this.setState({ friendlyName: e.target.value })}
                 onPressEnter={() => this.saveFriendlyName()}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
           </Form>
@@ -201,15 +211,6 @@ class QuickReply extends Component {
   }
 
   renderAcquireContact(qr) {
-    if (this.state.firstRender) {
-      this.props.setInputStateInRedux({
-        show_input: false,
-        input_placeholder: '',
-      })
-      this.setState({
-        firstRender: false,
-      })
-    }
     if (this.state.contact_updated) {
       return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '10px', }}>
@@ -233,11 +234,12 @@ class QuickReply extends Component {
                 value={this.state.first_name}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ first_name: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'Please enter a last name' : null}
+              validateStatus={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.last_name.length === 0 && this.state.contact_incomplete ? 'Please enter a last name' : null}
             >
               <Input
                 placeholder='Last Name'
@@ -245,11 +247,12 @@ class QuickReply extends Component {
                 value={this.state.last_name}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ last_name: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.phone.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.phone.length === 0 && this.state.contact_incomplete ? 'Please enter a phone number' : null}
+              validateStatus={this.state.phone.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.phone.length === 0 && this.state.contact_incomplete ? 'Please enter a phone number' : null}
             >
               <Input
                 placeholder='Phone Number'
@@ -257,11 +260,12 @@ class QuickReply extends Component {
                 value={this.state.phone}
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ phone: e.target.value })}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item
-            validateStatus={this.state.email.length === 0 && this.state.contact_incomplete ? 'error' : null}
-            help={this.state.email.length === 0 && this.state.contact_incomplete ? 'Please enter an email address' : null}
+              validateStatus={this.state.email.length === 0 && this.state.contact_incomplete ? 'error' : null}
+              help={this.state.email.length === 0 && this.state.contact_incomplete ? 'Please enter an email address' : null}
             >
               <Input
                 placeholder='Email Address'
@@ -270,6 +274,7 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ email: e.target.value })}
                 onPressEnter={() => this.updateContactDetails()}
+                style={comStyles().prettyInput}
               />
             </Form.Item>
             <Form.Item style={{ margin: 0 }}>
@@ -442,6 +447,9 @@ const comStyles = () => {
       borderRadius: '20px',
       border: '#2faded solid 2px',
       color: '#2faded',
+    },
+    prettyInput: {
+      borderRadius: '25px !important',
     }
 	}
 }

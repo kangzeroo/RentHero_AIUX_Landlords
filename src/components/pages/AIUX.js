@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import uuid from 'uuid'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
@@ -22,6 +23,7 @@ class AIUX extends Component {
   constructor() {
     super()
     this.htmlHistory = []
+    this.idHistory = []
     this.state = {
       input_style: 'input',
     }
@@ -56,7 +58,6 @@ class AIUX extends Component {
           id: uuid.v4(),
           sender: 'ai',
           com: prevProps.htmlBotComp,
-          // fullWidth: prevProps.htmlBotComp.props.data.message.payload.type === 'locations',
         })
       }
     }
@@ -116,6 +117,10 @@ class AIUX extends Component {
           */}
           {
             this.htmlHistory.map((_html) => {
+              if (_html.sender === 'user') {
+                // Question: _html.com.props.text
+              }
+              console.log(_html)
               if (_html.com.props && _html.com.props.data && _html.com.props.data.message && (!_html.com.props.data.message.text || (_html.com.props.data.message.text && _html.com.props.data.message.text === ''))) {
                 console.log('Bastardized content: ', _html)
                 return (
@@ -140,7 +145,7 @@ class AIUX extends Component {
                       {
                         _html.sender === 'user'
                         ?
-                        <Avatar icon='user' shape='circle' size='large' style={comStyles().avatarSize, { background: 'none' }} />
+                        <Avatar icon='user' shape='circle' size='large' style={comStyles().avatarSize, { background: 'none', border: 'white solid thin' }} />
                         :
                         null
                       }
