@@ -385,7 +385,7 @@ class QuickReply extends Component {
 // defines the types of variables in this.props
 QuickReply.propTypes = {
 	history: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,      // passed in
   identityId: PropTypes.string.isRequired,
   setInputStateInRedux: PropTypes.func.isRequired,
   current_ad: PropTypes.object.isRequired,

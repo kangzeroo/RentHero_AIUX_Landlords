@@ -155,7 +155,7 @@ class GenerateBotHTML extends Component {
 // defines the types of variables in this.props
 GenerateBotHTML.propTypes = {
 	history: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,  // passed in
   onDone: PropTypes.func,             // passed in
   onSubmit: PropTypes.func,           // passed in
   initQualify: PropTypes.func,        // passed in

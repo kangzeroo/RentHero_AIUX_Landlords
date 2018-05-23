@@ -92,7 +92,7 @@ class AIUX extends Component {
             <p style={{ color: 'white', marginBottom: '0', }}>{ this.props.current_ad.ad_title }</p>
           </div>
           <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', }}>
-            <Icon type='ellipsis' style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', }} size='large' />
+            <Icon type='ellipsis' onClick={() => console.log('ELLIPSIS CLICKED!')} style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', cursor: 'pointer' }} size='large' />
           </div>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
