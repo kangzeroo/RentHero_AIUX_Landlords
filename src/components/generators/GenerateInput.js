@@ -78,12 +78,12 @@ class GenerateInput extends Component {
           placeholder={this.props.input.input_placeholder}
           onPressEnter={() => this.submitText()}
           size='large'
-          style={comStyles().inputContainer}
+          style={comStyles(this.state.input_text.length > 0).inputContainer}
         />
         {
           this.state.input_text.length > 0
           ?
-          <Button type='primary' onClick={() => this.submitText()} style={{ position: 'absolute', right: '50px', }}>
+          <Button type='primary' onClick={() => this.submitText()} style={{ position: 'absolute', right: '50px', borderRadius: '25px' }}>
             SEND
           </Button>
           :
@@ -141,9 +141,9 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = (type) => {
+const comStyles = (send_button) => {
   let attrs
-  if (type === 'send_button') {
+  if (send_button) {
     attrs = {
       padding: '20px 100px 20px 60px',
     }

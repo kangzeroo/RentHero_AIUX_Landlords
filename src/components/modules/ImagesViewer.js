@@ -11,6 +11,8 @@ import {
   List,
   Card,
   Icon,
+  Button,
+  Spin,
 } from 'antd'
 import {
   Carousel,
@@ -26,6 +28,8 @@ class ImagesViewer extends Component {
   constructor() {
     super()
     this.state = {
+      images: [],
+
       imgHeight: 176,
 
       toggle_modal: false,
@@ -33,40 +37,43 @@ class ImagesViewer extends Component {
       context: {},
 
       slideIndex: 0,
+
+      loading: false,
+      loadingMore: false,
+      showLoadingMore: true,
     }
   }
 
   componentWillMount() {
-    console.log('LOADED IMAGES VIEWER')
-    console.log(this.props.images)
+    if (screen.width <= 550 && this.props.images.length > 3) {
+      this.setState({
+        images: this.props.images.slice(0, 3)
+      })
+    } else {
+      this.setState({
+        images: this.props.images,
+        showLoadingMore: false,
+      })
+    }
   }
-  //
-	// render() {
-	// 	return (
-	// 		<div id='ImagesViewer' style={comStyles().container}>
-  //       <p>{this.props.text}</p>
-  //       <Carousel style={{ width: '100%', }}>
-  //         {
-  //           this.props.images.map((img) => {
-  //             return (
-  //               <img
-  //                 key={img.image_url}
-  //                 src={renderProcessedImage(img.image_url)}
-  //                 style={{ width: 'auto', height: '300px', verticalAlign: 'top' }}
-  //                 alt=''
-  //                 onLoad={() => {
-  //                    // fire window resize event to change height
-  //                    window.dispatchEvent(new Event('resize'));
-  //                    this.setState({ imgHeight: 'auto' });
-  //                  }}
-  //               />
-  //             )
-  //           })
-  //         }
-  //       </Carousel>
-	// 		</div>
-	// 	)
-	// }
+
+  onLoadMore() {
+    this.setState({
+      loadingMore: true,
+    })
+    if (this.state.images.length + 3 < this.props.images.length) {
+      this.setState({
+        images: this.props.images.slice(0, this.state.images.length + 3),
+        loadingMore: false,
+      })
+    } else {
+      this.setState({
+        images: this.props.images,
+        loadingMore: false,
+        showLoadingMore: false,
+      })
+    }
+  }
 
   toggleModal(bool, attr, context) {
     if (bool && attr) {
@@ -81,6 +88,7 @@ class ImagesViewer extends Component {
     })
   }
 
+
   renderAppropriateModal(modal_name, context) {
     if (modal_name === 'show_image') {
       return this.renderImagePopup(context)
@@ -91,10 +99,38 @@ class ImagesViewer extends Component {
     // const m = document.getElementsByClassName('am-modal-content')
     // console.log(m)
     // m.style.background = 'inherit'
+    const closeModal = () => {
+      this.toggleModal(false, '')
+      this.setState({
+        slideIndex: 0,
+      })
+    }
+    const goLeft = (slideIndex) => {
+      if (slideIndex === 0) {
+        this.setState({
+          slideIndex: this.props.images.length - 1,
+        })
+      } else {
+        this.setState({
+          slideIndex: slideIndex - 1
+        })
+      }
+    }
+    const goRight = (slideIndex) => {
+      if (slideIndex === this.props.images.length - 1) {
+        this.setState({
+          slideIndex: 0,
+        })
+      } else {
+        this.setState({
+          slideIndex: slideIndex + 1
+        })
+      }
+    }
     return (
       <Modal
         visible={this.state.toggle_modal}
-        onClose={() => this.toggleModal(false, '')}
+        onClose={closeModal}
         transparent
         maskClosable
         style={{ width: '100%', background: 'inherit' }}
@@ -104,7 +140,7 @@ class ImagesViewer extends Component {
             type='close'
             style={{ color: 'white', fontSize: '2rem', }}
             size='large'
-            onClick={() => this.toggleModal(false, '')}
+            onClick={closeModal}
           />
         </div>
         <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', zIndex: 1000 }}>
@@ -112,7 +148,7 @@ class ImagesViewer extends Component {
             type='left'
             style={{ color: 'white', fontSize: '2rem' }}
             size='large'
-            onClick={() => this.setState({ slideIndex: this.state.slideIndex - 1 })}
+            onClick={() => goLeft(this.state.slideIndex)}
           />
         </div>
         <div style={{ position: 'absolute', right: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', zIndex: 1000 }}>
@@ -120,7 +156,7 @@ class ImagesViewer extends Component {
             type='right'
             style={{ color: 'white', fontSize: '2rem' }}
             size='large'
-            onClick={() => this.setState({ slideIndex: this.state.slideIndex + 1 })}
+            onClick={() => goRight(this.state.slideIndex)}
           />
         </div>
           <Carousel
@@ -131,7 +167,7 @@ class ImagesViewer extends Component {
             beforeChange={(from, to) => this.setState({ slideIndex: to })}
           >
             {
-              [context].concat(this.props.images.map(i => i.image_url).filter(i => i !== context)).map(image => {
+              [context].concat(this.props.images.map(i => i.image_url).filter(i => i !== context)).map((image) => {
                 return (
                   <img
                     key={image}
@@ -154,11 +190,20 @@ class ImagesViewer extends Component {
   }
 
   render() {
+    const { loading, loadingMore, showLoadingMore, images } = this.state
+    const loadMore = showLoadingMore ? (
+      <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
+        {loadingMore && <Spin />}
+        {!loadingMore && <Button type='primary' onClick={() => this.onLoadMore()} style={{ borderRadius: '25px' }}>Load More</Button>}
+      </div>
+    ) : null;
     return (
       <div id='ImagesViewer' style={comStyles().container}>
         <List
           grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }}
-          dataSource={this.props.images}
+          loading={loading}
+          loadMore={loadMore}
+          dataSource={images}
           renderItem={item => (
             <List.Item>
               <Card
@@ -217,7 +262,7 @@ const comStyles = () => {
       width: '80vw',
       backgroundColor: 'aliceblue',
       // overflowX: 'scroll',
-      padding: '20px',
+      padding: '20px 20px 0px 20px',
       borderRadius: '20px',
 		}
 	}

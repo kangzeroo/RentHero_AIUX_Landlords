@@ -44,6 +44,13 @@ class ConvoUI extends Component {
 		this.feedInObserver = null
 	}
 
+	componentWillMount() {
+		this.props.setInputStateInRedux({
+			show_input: false,
+			input_placeholder: '',
+		})
+	}
+
 	componentDidMount() {
 		this.initObservable()
 		this.listenFCM()
@@ -338,7 +345,6 @@ class ConvoUI extends Component {
 			.catch((err) => {
 				console.log(err)
 			})
-
 	}
 
 	render() {
