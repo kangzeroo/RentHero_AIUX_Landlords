@@ -564,6 +564,7 @@ const comStyles = (full) => {
       whiteSpace: 'normal',
       height: 'auto',
       padding: '5px',
+      justifyContent: 'center'
     },
     prettyInput: {
       borderRadius: '25px !important',
