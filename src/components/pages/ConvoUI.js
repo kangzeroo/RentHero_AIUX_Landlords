@@ -30,6 +30,7 @@ class ConvoUI extends Component {
 	constructor() {
 		super()
 		this.state = {
+			ad_id: '',
 			session_id: '',
 
 			messageID: '',					 // messageID will change every time this.state.nextHtmlBotComp is changed
@@ -48,6 +49,14 @@ class ConvoUI extends Component {
 	}
 
 	componentWillMount() {
+		console.log(this.props.location)
+		const ad_id = this.props.location.pathname.slice(
+			'/prop/'.length
+		)
+		console.log(ad_id)
+		this.setState({
+			ad_id: ad_id
+		})
 		this.props.setInputStateInRedux({
 			show_input: false,
 			input_placeholder: '',
@@ -209,13 +218,13 @@ class ConvoUI extends Component {
 
 	initializeAdAndDialogflow(identityId) {
 		// console.log('initializeAdAndDialogflow')
-		getAdvertisement(this.props.ad_id)
+		getAdvertisement(this.state.ad_id)
 		.then((data) => {
 			// console.log(data)
 			return this.props.saveAdToRedux(data)
 		})
 		.then(() => {
-			return getRepForProperty(this.props.ad_id)
+			return getRepForProperty(this.state.ad_id)
 		})
 		.then((data) => {
 			return this.props.saveBotToRedux(data)
@@ -237,7 +246,7 @@ class ConvoUI extends Component {
 		// console.log(this.props.representative.bot_id)
 		const session_id = localStorage.getItem('session_id')
 		console.log(`Session ID: ${session_id}`)
-		initDialogFlow(session_id, this.props.ad_id, identityId, botId)
+		initDialogFlow(session_id, this.state.ad_id, identityId, botId)
 			.then((msg) => {
 				console.log(msg)
 				this.props.initializeFirebaseNotifications()
@@ -268,7 +277,7 @@ class ConvoUI extends Component {
 	}
 
 	getRepresentativeForAd() {
-		getRepForProperty(this.props.ad_id)
+		getRepForProperty(this.state.ad_id)
 			.then((data) => {
 				// console.log(data)
 				this.props.saveBotToRedux(data)
@@ -318,7 +327,7 @@ class ConvoUI extends Component {
 			nextHtmlUserComp: (<UserResponse text={text} />),
 		})
 		// Promise.resolve() represents some API call
-		sendMessageToDialogFlow(text, this.props.session_id, this.props.ad_id, this.props.representative.bot_id, this.props.identityId)
+		sendMessageToDialogFlow(text, this.props.session_id, this.state.ad_id, this.props.representative.bot_id, this.props.identityId)
 			.then((msg) => {
 				console.log(msg)
 				this.feedInObserver.next({
@@ -349,7 +358,7 @@ class ConvoUI extends Component {
 			show_input: true,
 			input_placeholder: 'Ask me more questions!',
 		})
-		dialogFlowInitQualification(this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
+		dialogFlowInitQualification(this.props.session_id, this.state.ad_id, this.props.identityId, this.props.representative.bot_id)
 			.then((msg) => {
 				console.log(msg)
 				this.feedInObserver.next({
