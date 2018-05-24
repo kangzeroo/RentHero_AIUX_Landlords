@@ -532,6 +532,10 @@ const comStyles = (full) => {
       borderRadius: '20px',
       border: '#2faded solid 2px',
       color: '#2faded',
+      display: 'flex',
+      flexWrap: 'wrap',
+      whiteSpace: 'normal',
+      height: 'auto'
     },
     prettyInput: {
       borderRadius: '25px !important',
