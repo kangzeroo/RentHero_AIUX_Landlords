@@ -125,14 +125,14 @@ class AIUX extends Component {
                 // Question: _html.com.props.text
               }
               console.log(_html)
-              if (_html.com.props && _html.com.props.data && _html.com.props.data.message && (!_html.com.props.data.message.text || (_html.com.props.data.message.text && _html.com.props.data.message.text === ''))) {
-                console.log('Bastardized content: ', _html)
-                return (
-                  <div key={_html.id}>
-                    <div style={{ marginLeft: '60px', }}>{_html.com}</div>
-                  </div>
-                )
-              } else {
+              // if (_html.com.props && _html.com.props.data && _html.com.props.data.message && (!_html.com.props.data.message.text || (_html.com.props.data.message.text && _html.com.props.data.message.text === ''))) {
+              //   console.log('Bastardized content: ', _html)
+              //   return (
+              //     <div key={_html.id}>
+              //       <div style={{ marginLeft: '60px', }}>{_html.com}</div>
+              //     </div>
+              //   )
+              // } else {
                 return (
                   <div key={_html.id} style={messageStyles(_html.sender).container}>
                     <div style={messageStyles(_html.sender).message}>
@@ -165,7 +165,7 @@ class AIUX extends Component {
                     </div>
                   </div>
                 )
-              }
+              // }
             })
           }
         </div>
