@@ -99,6 +99,7 @@ class Questions extends Component {
                       onPressEnter={() => this.saveAnswerAndMoveOn(question, index + 1)}
                       disabled={index <= this.state.saveIndex}
                       style={{ borderRadius: '25px' }}
+                      onClick={() => this.props.scrollDown()}
                     />
                   </Form.Item>
                   <Form.Item>

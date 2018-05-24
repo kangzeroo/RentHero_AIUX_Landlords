@@ -254,6 +254,7 @@ class ConvoUI extends Component {
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
 															initQualify={() => this.initiateQualification()}
+															scrollDown={() => this.scrollDown()}
 															executeDialogFlowEvent={(event_name) => this.executeDialogFlowEvent(event_name)}
 														/>),
 					nextHtmlInput: (<GenerateInput
@@ -305,6 +306,7 @@ class ConvoUI extends Component {
 				nextHtmlInput: (<GenerateInput
 													data={{ message: { ...msg, text: msg.message } }}
 													onSubmit={(t) => this.submitted(t)}
+													scrollDown={() => this.scrollDown()}
 												/>),
 				messageID: payload.data.message_id,
 			})
@@ -342,6 +344,7 @@ class ConvoUI extends Component {
 					nextHtmlInput: (<GenerateInput
 														data={{ message: { ...msg, text: msg.message } }}
 														onSubmit={(t) => this.submitted(t)}
+														scrollDown={() => this.scrollDown()}
 													/>),
 					messageID: msg.id,
 				})
@@ -371,6 +374,7 @@ class ConvoUI extends Component {
 					nextHtmlInput: (<GenerateInput
 														data={{ message: { ...msg, text: msg.message } }}
 														onSubmit={(t) => this.submitted(t)}
+														scrollDown={() => this.scrollDown()}
 													/>),
 					messageID: msg.id,
 				})
@@ -401,6 +405,7 @@ class ConvoUI extends Component {
 					nextHtmlInput: (<GenerateInput
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
+															scrollDown={() => this.scrollDown()}
 													/>),
 					messageID: msg.id,
 				})
@@ -423,6 +428,7 @@ class ConvoUI extends Component {
 					nextHtmlInput: (<GenerateInput
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
+															scrollDown={() => this.scrollDown()}
 													/>),
 					messageID: msg.id,
 				})
@@ -445,10 +451,12 @@ class ConvoUI extends Component {
 					nextHtmlUserComp: null,
 					nextHtmlBotComp: (<GenerateBotHTML
 															data={{ message: { ...msg, text: msg.message } }}
+															scrollDown={() => this.scrollDown()}
 														/>),
 					nextHtmlInput: (<GenerateInput
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
+															scrollDown={() => this.scrollDown()}
 													/>),
 					messageID: msg.id,
 				})

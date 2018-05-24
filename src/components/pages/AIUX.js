@@ -101,7 +101,7 @@ class AIUX extends Component {
             BETA
           </div>
         </div>
-        <div id='botFeed' style={comStyles().botFeed}>
+        <div id='botFeed' style={comStyles(this.props.input.show_input).botFeed}>
           <br />
           {
             this.htmlHistory.map((_html) => {
@@ -220,7 +220,17 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (show_input) => {
+  let attrs
+  if (show_input) {
+    attrs = {
+      height: 'calc(100vh - 170px)',
+    }
+  } else {
+    attrs = {
+      height: 'calc(100vh - 80px)',
+    }
+  }
 	return {
 		container: {
       display: 'flex',
@@ -266,12 +276,11 @@ const comStyles = () => {
       maxWidth: '100%',
       // flexGrow: 16,
       // backgroundColor: 'white',
-      height: 'calc(100vh - 170px)',
       overflowY: 'scroll',
       // background: '#56CCF2',  /* fallback for old browsers */
       // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
       // background: 'linear-gradient(to right, #2F80ED, #56CCF2)', /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+      ...attrs,
     },
     botProfile: {
       display: 'flex',
@@ -317,7 +326,7 @@ const inputStyles = (flexGrow = 0) => {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '10px',
-      position: 'absolute',
+      position: 'fixed',
       bottom: 0,
       minHeight: '90px',
       maxHeight: '90px',

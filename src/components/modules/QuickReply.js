@@ -66,13 +66,28 @@ class QuickReply extends Component {
         phone: contact.phone,
         email: contact.email,
       })
+      this.props.setInputStateInRedux({
+        show_input: false,
+        input_placeholder: 'Ask me a question!',
+      })
     } else if (this.props.data.message.payload.quick_replies[0].content_type === 'init_qualification') {
       this.checkQualificationStatus()
+    } else {
+      this.props.setInputStateInRedux({
+        show_input: true,
+        input_placeholder: 'Ask me a question!',
+      })
     }
-    this.props.setInputStateInRedux({
-      show_input: true,
-      input_placeholder: 'Ask me a question!',
-    })
+  }
+
+  componentDidMount() {
+    console.log('SCROLL DOWNB')
+    this.props.scrollDown()
+  }
+
+  componentDidUpdate() {
+    console.log('SCROLL DOWN UPDATED')
+    this.props.scrollDown()
   }
 
   saveFriendlyName() {
@@ -274,6 +289,7 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ first_name: e.target.value })}
                 style={comStyles().prettyInput}
+                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -287,6 +303,7 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ last_name: e.target.value })}
                 style={comStyles().prettyInput}
+                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -300,6 +317,7 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ phone: e.target.value })}
                 style={comStyles().prettyInput}
+                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -314,6 +332,7 @@ class QuickReply extends Component {
                 onChange={e => this.setState({ email: e.target.value })}
                 onPressEnter={() => this.updateContactDetails()}
                 style={comStyles().prettyInput}
+                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item style={{ margin: 0 }}>
