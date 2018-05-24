@@ -12,7 +12,7 @@ import firebase from 'firebase'
 import {
 	Spin,
 } from 'antd'
-import { initDialogFlow, sendMessageToDialogFlow, dialogFlowInitQualification, dialogFlowCompleteQualification } from '../../api/dialogflow/dialogflow_api'
+import { initDialogFlow, sendMessageToDialogFlow, dialogFlowInitQualification, dialogFlowExecuteEvent } from '../../api/dialogflow/dialogflow_api'
 import { initializeFirebaseNotifications, addChatHistory } from '../../actions/firebase/firebase_cloud_messaging_actions'
 import { getMostRecentChat } from '../../api/fcm/firebase_cloud_messaging'
 import UserResponse from '../modules/UserResponse'
@@ -252,8 +252,15 @@ class ConvoUI extends Component {
 				this.props.initializeFirebaseNotifications()
 				this.setState({
 					session_id: msg.session_id,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} initQualify={() => this.initiateQualification()} />),
-					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlBotComp: (<GenerateBotHTML
+															data={{ message: { ...msg, text: msg.message } }}
+															onSubmit={(t) => this.submitted(t)}
+															initQualify={() => this.initiateQualification()}
+														/>),
+					nextHtmlInput: (<GenerateInput
+														data={{ message: { ...msg, text: msg.message } }}
+														onSubmit={(t) => this.submitted(t)}
+													/>),
 					messageID: msg.id,
 					loading: false,
 				})
@@ -290,8 +297,16 @@ class ConvoUI extends Component {
 			// console.log(msg)
 			this.setState({
 				session_id: msg.session_id,
-				nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message }, payload: payload.data }} initQualify={() => this.initiateQualification()} />),
-				nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message }, payload: payload.data }} onSubmit={(t) => this.submitted(t)} />),
+				nextHtmlBotComp: (<GenerateBotHTML
+														data={{ message: { ...msg, text: msg.message } }}
+														initQualify={() => this.initiateQualification()}
+														scrollDown={() => this.scrollDown()}
+														requestedTour={(tour_id) => this.requestedTour(tour_id)}
+													/>),
+				nextHtmlInput: (<GenerateInput
+													data={{ message: { ...msg, text: msg.message } }}
+													onSubmit={(t) => this.submitted(t)}
+												/>),
 				messageID: payload.data.message_id,
 			})
 		})
@@ -317,8 +332,18 @@ class ConvoUI extends Component {
 				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.nextHtmlBotCompDoneEvent()} initQualify={() => this.initiateQualification()} />),
-					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlBotComp: (<GenerateBotHTML
+															data={{ message: { ...msg, text: msg.message } }}
+															onDone={() => this.nextHtmlBotCompDoneEvent()}
+															onQualified={() => this.completedQualification()}
+															initQualify={() => this.initiateQualification()}
+															scrollDown={() => this.scrollDown()}
+															requestedTour={(tour_id) => this.requestedTour(tour_id)}
+														/>),
+					nextHtmlInput: (<GenerateInput
+														data={{ message: { ...msg, text: msg.message } }}
+														onSubmit={(t) => this.submitted(t)}
+													/>),
 					messageID: msg.id,
 				})
 			})
@@ -338,8 +363,16 @@ class ConvoUI extends Component {
 				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} onDone={() => this.completedQualification()} scrollDown={() => this.scrollDown()} />),
-					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlBotComp: (<GenerateBotHTML
+															data={{ message: { ...msg, text: msg.message } }}
+															onQualified={() => this.completedQualification()}
+															scrollDown={() => this.scrollDown()}
+															requestedTour={(tour_id) => this.requestedTour(tour_id)}
+														/>),
+					nextHtmlInput: (<GenerateInput
+														data={{ message: { ...msg, text: msg.message } }}
+														onSubmit={(t) => this.submitted(t)}
+													/>),
 					messageID: msg.id,
 				})
 			})
@@ -353,13 +386,48 @@ class ConvoUI extends Component {
 	}
 
 	completedQualification() {
-		dialogFlowCompleteQualification(this.props.session_id, this.state.ad_id, this.props.identityId, this.props.representative.bot_id)
+		this.props.setInputStateInRedux({
+			show_input: true,
+			input_placeholder: 'Ask me more questions!',
+		})
+		dialogFlowExecuteEvent('completed-qualification-answers', this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id)
+			.then((msg) => {
+				this.feedInObserver.next({
+					nextHtmlUserComp: null,
+					nextHtmlBotComp: (<GenerateBotHTML
+															data={{ message: { ...msg, text: msg.message } }}
+															scrollDown={() => this.scrollDown()}
+															requestedTour={(tour_id) => this.requestedTour(tour_id)}
+														/>),
+					nextHtmlInput: (<GenerateInput
+															data={{ message: { ...msg, text: msg.message } }}
+															onSubmit={(t) => this.submitted(t)}
+													/>),
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
+
+	requestedTour(tour_id) {
+		console.log('requestedTour: ', tour_id)
+		this.props.setInputStateInRedux({
+			show_input: true,
+			input_placeholder: 'Ask me more questions!',
+		})
+		dialogFlowExecuteEvent('tour-requested', this.props.session_id, this.props.ad_id, this.props.identityId, this.props.representative.bot_id, tour_id)
 			.then((msg) => {
 				console.log(msg)
 				this.feedInObserver.next({
 					nextHtmlUserComp: null,
-					nextHtmlBotComp: (<GenerateBotHTML data={{ message: { ...msg, text: msg.message } }} />),
-					nextHtmlInput: (<GenerateInput data={{ message: { ...msg, text: msg.message } }} onSubmit={(t) => this.submitted(t)} />),
+					nextHtmlBotComp: (<GenerateBotHTML
+															data={{ message: { ...msg, text: msg.message } }}
+														/>),
+					nextHtmlInput: (<GenerateInput
+															data={{ message: { ...msg, text: msg.message } }}
+															onSubmit={(t) => this.submitted(t)}
+													/>),
 					messageID: msg.id,
 				})
 			})

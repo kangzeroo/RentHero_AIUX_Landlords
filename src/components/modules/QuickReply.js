@@ -21,6 +21,7 @@ import SubtitlesMachine from './SubtitlesMachine'
 import { saveFriendlyNameToLeads, updateLeadInfo, getQualificationStatus, } from '../../api/leads/leads_api'
 import { setInputStateInRedux } from '../../actions/chat/chat_actions'
 import { dialogFlowPropertyQuestion, dialogFlowInitQualification, } from '../../api/dialogflow/dialogflow_api'
+import TourSelection from './TourSelection'
 
 class QuickReply extends Component {
 
@@ -163,6 +164,7 @@ class QuickReply extends Component {
         })
         if (data.questions && data.answered) {
           console.log('congrats, everything has been answered')
+          this.props.onQualified()
         } else {
           this.props.initQualification()
         }
@@ -422,6 +424,16 @@ class QuickReply extends Component {
                   }
                 </div>
               )
+            } else if (qr.content_type === 'select_tour') {
+              return (
+                <div key={i} style={comStyles().quickreply}>
+                  <TourSelection
+                    payload={qr}
+                    scrollDown={() => this.props.scrollDown()}
+                    requestedTour={(tour_id) => this.props.requestedTour(tour_id)}
+                  />
+                </div>
+              )
             }
           })
         }
@@ -483,12 +495,18 @@ QuickReply.propTypes = {
   representative: PropTypes.object.isRequired,
   submitMessage: PropTypes.func,           // passed in
   initQualification: PropTypes.func,       // passed in
+  onQualified: PropTypes.func,             // passed in
+  scrollDown: PropTypes.func,              // passed in
+  requestedTour: PropTypes.func,           // passed in
 }
 
 // for all optional props, define a default value
 QuickReply.defaultProps = {
   onSubmit: () => {},
   initQualification: () => {},
+  onQualified: () => {},
+  scrollDown: () => {},
+  requestedTour: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling

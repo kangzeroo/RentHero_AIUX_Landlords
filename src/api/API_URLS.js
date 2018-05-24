@@ -7,7 +7,7 @@
 // export const DIALOGFLOW_MS = 'https://6482dbc5.ngrok.io'
 // export const FCM_MS = 'https://a72a399c.ngrok.io'
 // export const TENANT_AD_MS = 'https://localhost:8202'
-//
+
 
 // STAGING
 export const DIALOGFLOW_MS = 'https://renthero.host:8302'

@@ -69,7 +69,7 @@ class Questions extends Component {
             saveIndex: this.state.saveIndex + 1,
           })
           message.success(data.message)
-          this.props.onDone()
+          this.props.onQualified()
         })
     }
   }
@@ -175,13 +175,13 @@ Questions.propTypes = {
   setInputStateInRedux: PropTypes.func.isRequired,
   session_id: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,        // passed in
-  onDone: PropTypes.func,                   // passed in
+  onQualified: PropTypes.func,                   // passed in
   scrollDown: PropTypes.func,               // passed in
 }
 
 // for all optional props, define a default value
 Questions.defaultProps = {
-  onDone: () => {},
+  onQualified: () => {},
   scrollDown: () => {},
 }
 
