@@ -560,11 +560,12 @@ const comStyles = (full) => {
       border: '#2faded solid 2px',
       color: '#2faded',
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       flexWrap: 'wrap',
       whiteSpace: 'normal',
       height: 'auto',
-      padding: '5px',
-      justifyContent: 'center'
+      padding: '10px',
     },
     prettyInput: {
       borderRadius: '25px !important',

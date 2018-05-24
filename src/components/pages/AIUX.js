@@ -96,29 +96,13 @@ class AIUX extends Component {
             <h2 style={{ color: 'white', marginBottom: '0', fontWeight: 'bold', }}>{this.props.representative.friendly_name}</h2>
             <p style={{ color: 'white', marginBottom: '0', }}>{ this.props.current_ad.ad_title }</p>
           </div>
-          <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', }}>
-            <Icon type='ellipsis' onClick={() => console.log('ELLIPSIS CLICKED!')} style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', cursor: 'pointer' }} size='large' />
+          <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end', fontWeight: 'bold' }}>
+            {/*<Icon type='ellipsis' onClick={() => console.log('ELLIPSIS CLICKED!')} style={{ color: 'white', fontSize: '1.8REM', fontWeight: 'bold', cursor: 'pointer' }} size='large' />*/}
+            BETA
           </div>
         </div>
         <div id='botFeed' style={comStyles().botFeed}>
           <br />
-        {/*
-          <div style={comStyles().botProfile}>
-            <img
-              src={this.props.representative.thumbnail}
-              alt='Avatar'
-              style={{
-                borderRadius: '50%',
-                height: '150px',
-                width: '150px',
-              }}
-            />
-            <br />
-            <div style={{ fontWeight: 'bold', fontSize: '1.2REM' }}>{ this.props.representative.friendly_name }</div>
-            <Rate value={5} />
-            <p>Intelligent Leasing Assistant</p>
-          </div>
-          */}
           {
             this.htmlHistory.map((_html) => {
               if (_html.sender === 'user') {
@@ -146,15 +130,7 @@ class AIUX extends Component {
                       <div style={{ padding: '0px 10px' }}>
                         {_html.com}
                       </div>
-                      {
-                        _html.sender === 'user'
-                        ?
-                        null
-                        :
-                        <ThumbsVoter
-                          messageID={_html.messageID}
-                        />
-                      }
+
                       {
                         _html.sender === 'user'
                         ?
@@ -163,11 +139,21 @@ class AIUX extends Component {
                         null
                       }
                     </div>
+                    {
+                      _html.sender === 'user'
+                      ?
+                      null
+                      :
+                      <ThumbsVoter
+                        messageID={_html.messageID}
+                      />
+                    }
                   </div>
                 )
               // }
             })
           }
+          <br /><br />
         </div>
         {
           this.props.input.show_input
@@ -262,7 +248,7 @@ const comStyles = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       color: 'white',
-      height: '8vh',
+      height: '80px',
       minWidth: '100%',
       maxWidth: '100%',
       padding: '10px',
@@ -278,9 +264,9 @@ const comStyles = () => {
       alignItems: 'flex-start',
       minWidth: '100%',
       maxWidth: '100%',
-      flexGrow: 16,
+      // flexGrow: 16,
       // backgroundColor: 'white',
-      maxHeight: '92vh',
+      height: 'calc(100vh - 170px)',
       overflowY: 'scroll',
       // background: '#56CCF2',  /* fallback for old browsers */
       // background: '-webkit-linear-gradient(to right, #2F80ED, #56CCF2)',  /* Chrome 10-25, Safari 5.1-6 */
@@ -331,6 +317,10 @@ const inputStyles = (flexGrow = 0) => {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '10px',
+      position: 'absolute',
+      bottom: 0,
+      minHeight: '90px',
+      maxHeight: '90px',
     }
   }
 }
