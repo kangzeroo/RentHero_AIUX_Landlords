@@ -395,6 +395,7 @@ class ConvoUI extends Component {
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
 													/>),
+					messageID: msg.id,
 				})
 			})
 			.catch((err) => {
@@ -416,6 +417,7 @@ class ConvoUI extends Component {
 															data={{ message: { ...msg, text: msg.message } }}
 															onSubmit={(t) => this.submitted(t)}
 													/>),
+					messageID: msg.id,
 				})
 			})
 			.catch((err) => {

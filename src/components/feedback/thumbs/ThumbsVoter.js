@@ -18,8 +18,10 @@ import { saveUserReaction } from '../../../api/feedback/feedback_api'
 class ThumbsVoter extends Component {
 
   clickedThumb(bool) {
+    const x = this.props.messageID || 'missing_message_id'
+    console.log(x)
     saveUserReaction({
-      message_id: this.props.messageID,
+      message_id: this.props.messageID || 'missing_message_id',
       reaction: bool ? 'thumbsup' : 'thumbsdown',
       ad_id: this.props.ad_id,
       session_id: this.props.session_id,
