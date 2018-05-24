@@ -79,6 +79,7 @@ class GenerateInput extends Component {
           onPressEnter={() => this.submitText()}
           size='large'
           style={comStyles(this.state.input_text.length > 0).inputContainer}
+          onClick={() => this.props.scrollDown()}
         />
         {
           this.state.input_text.length > 0
@@ -113,11 +114,13 @@ GenerateInput.propTypes = {
   input: PropTypes.object.isRequired,
   showed_interest: PropTypes.bool.isRequired,
   showInterest: PropTypes.func.isRequired,
+  scrollDown: PropTypes.func,                   // passed in
 }
 
 // for all optional props, define a default value
 GenerateInput.defaultProps = {
-  data: {}
+  data: {},
+  scrollDown: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
