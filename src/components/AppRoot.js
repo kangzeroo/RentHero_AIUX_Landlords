@@ -19,6 +19,7 @@ import AppRootMechanics from './AppRootMechanics'
 import ConvoUI from './pages/ConvoUI'
 import Passwordless from './auth/Passwordless'
 import LoginPasswordless from './auth/LoginPasswordless'
+import HomePage from './pages/HomePage'
 
 class AppRoot extends Component {
 
@@ -26,7 +27,8 @@ class AppRoot extends Component {
     return (
       <Switch>
 
-        <Route exact path='/' render={ConvoUI} />
+        <Route exact path='/' render={HomePage} />
+        <Route exact path='/prop/:property_id' render={ConvoUI} />
         <Route exact path='/login' render={LoginPasswordless} />
         <Route exact path='/passwordless' render={Passwordless} />
         <Route path='*' render={ConvoUI} />
