@@ -129,12 +129,9 @@ class Questions extends Component {
 	render() {
 		return (
 			<div id='Questions' style={comStyles().container}>
-        {
-          this.props.data.message.message.length > 0
-          ?
           <SubtitlesMachine
             speed={0.1}
-            text={this.props.data.message.message}
+            text={this.props.data.message.payload.message}
             textStyles={{
               color: 'black',
               textAlign: 'left',
@@ -153,11 +150,9 @@ class Questions extends Component {
               })
             }}
           />
-          :
-          null
-        }
+
         {
-          this.state.textLoaded || this.props.data.message.message.length === 0
+          this.state.textLoaded
           ?
           this.renderQuestions()
           :
