@@ -22,6 +22,7 @@ import {
   renderProcessedImage,
   renderProcessedThumbnail600jpeg,
 } from '../../api/general/general_api'
+import SubtitlesMachine from './SubtitlesMachine'
 
 class ImagesViewer extends Component {
 
@@ -199,6 +200,25 @@ class ImagesViewer extends Component {
     ) : null;
     return (
       <div id='ImagesViewer' style={comStyles().container}>
+        <SubtitlesMachine
+          speed={0.25}
+          text={this.props.text}
+          textStyles={{
+            // fontSize: '1.3rem',
+            // color: 'black',
+            textAlign: 'left',
+          }}
+          containerStyles={{
+            width: '100%',
+            backgroundColor: 'aliceblue',
+            padding: '20px',
+            borderRadius: '20px',
+          }}
+          doneEvent={() => {
+            console.log('DONE')
+            this.props.onDone()
+          }}
+        />
         <List
           grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }}
           loading={loading}
@@ -262,7 +282,7 @@ const comStyles = () => {
       width: '80vw',
       backgroundColor: 'aliceblue',
       // overflowX: 'scroll',
-      padding: '20px 20px 0px 20px',
+      padding: '20px',
       borderRadius: '20px',
 		}
 	}

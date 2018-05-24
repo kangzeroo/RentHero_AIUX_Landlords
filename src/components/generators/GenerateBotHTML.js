@@ -52,6 +52,7 @@ class GenerateBotHTML extends Component {
           <ImagesViewer
             text={this.props.data.message.payload.text}
             images={this.props.data.message.payload.images}
+            onDone={() => this.props.onDone()}
           />
         )
       } else if (this.props.data.message.payload.quick_replies) {
@@ -86,6 +87,28 @@ class GenerateBotHTML extends Component {
           <LocationsComponent
             listOfResults={this.props.data.message.payload.results}
             id={uuid.v4()}
+          />
+        )
+      } else if (this.props.data.message.payload.text) {
+        return (
+          <SubtitlesMachine
+            speed={0.25}
+            text={this.props.data.message.payload.text}
+            textStyles={{
+              // fontSize: '1.3rem',
+              // color: 'black',
+              textAlign: 'left',
+            }}
+            containerStyles={{
+              width: '100%',
+              backgroundColor: 'aliceblue',
+              padding: '20px',
+              borderRadius: '20px',
+            }}
+            doneEvent={() => {
+              console.log('DONE')
+              this.props.onDone()
+            }}
           />
         )
       }
