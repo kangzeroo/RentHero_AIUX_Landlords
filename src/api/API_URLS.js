@@ -4,14 +4,14 @@
 // LOCAL
 
 // DEV
-export const DIALOGFLOW_MS = 'https://a8799126.ngrok.io'
-export const FCM_MS = 'https://a5e7f5d7.ngrok.io'
-export const TENANT_AD_MS = 'https://localhost:8202'
+// export const DIALOGFLOW_MS = 'https://3e02e60e.ngrok.io'
+// export const FCM_MS = 'https://ff5cacac.ngrok.io'
+// export const TENANT_AD_MS = 'https://localhost:8202'
 
 
 // STAGING
-// export const DIALOGFLOW_MS = 'https://renthero.host:8302'
-// export const FCM_MS = 'https://renthero.host:8303'
-// export const TENANT_AD_MS = 'https://renthero.host:8202'
+export const DIALOGFLOW_MS = 'https://renthero.host:8302'
+export const FCM_MS = 'https://renthero.host:8303'
+export const TENANT_AD_MS = 'https://renthero.host:8202'
 
 // PROD
