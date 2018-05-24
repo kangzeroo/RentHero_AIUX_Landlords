@@ -64,6 +64,7 @@ class GenerateBotHTML extends Component {
             onQualified={() => this.props.onQualified()}
             scrollDown={() => this.props.scrollDown()}
             requestedTour={(tour_id) => this.props.requestedTour(tour_id)}
+            executeDialogFlowEvent={(event_name) => this.props.executeDialogFlowEvent(event_name)}
           />
         )
       } else if (this.props.data.message.payload.questions) {
@@ -157,6 +158,7 @@ GenerateBotHTML.propTypes = {
   scrollDown: PropTypes.func,         // psased in
   onQualified: PropTypes.func,        // passed in
   requestedTour: PropTypes.func,      // passed in
+  executeDialogFlowEvent: PropTypes.func,   // passed in
 }
 
 // for all optional props, define a default value
@@ -167,6 +169,7 @@ GenerateBotHTML.defaultProps = {
   scrollDown: () => {},
   onQualified: () => {},
   requestedTour: () => {},
+  executeDialogFlowEvent: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling

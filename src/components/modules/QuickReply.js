@@ -107,7 +107,14 @@ class QuickReply extends Component {
         clickedPurpose: true,
         purpose: 'question',
       })
-      dialogFlowPropertyQuestion(this.props.session_id, this.props.current_ad.ad_id, this.props.identityId, this.props.representative.bot_id)
+      // dialogFlowPropertyQuestion(this.props.session_id, this.props.current_ad.ad_id, this.props.identityId, this.props.representative.bot_id)
+      //   .then((data) => {
+      //     console.log(data)
+      //   })
+      //   .catch((err) => {
+      //     console.log(err)
+      //   })
+      this.props.executeDialogFlowEvent('init-from-property-question')
       this.props.setInputStateInRedux({
         show_input: true,
         input_placeholder: 'Ask me a question!',
@@ -498,6 +505,7 @@ QuickReply.propTypes = {
   onQualified: PropTypes.func,             // passed in
   scrollDown: PropTypes.func,              // passed in
   requestedTour: PropTypes.func,           // passed in
+  executeDialogFlowEvent: PropTypes.func,  // passed in
 }
 
 // for all optional props, define a default value
@@ -507,6 +515,7 @@ QuickReply.defaultProps = {
   onQualified: () => {},
   scrollDown: () => {},
   requestedTour: () => {},
+  executeDialogFlowEvent: () => {},
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -553,7 +562,8 @@ const comStyles = (full) => {
       display: 'flex',
       flexWrap: 'wrap',
       whiteSpace: 'normal',
-      height: 'auto'
+      height: 'auto',
+      padding: '5px',
     },
     prettyInput: {
       borderRadius: '25px !important',
