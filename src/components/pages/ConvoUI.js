@@ -19,7 +19,7 @@ import UserResponse from '../modules/UserResponse'
 import GenerateBotHTML from '../generators/GenerateBotHTML'
 import GenerateInput from '../generators/GenerateInput'
 import AIUX from './AIUX'
-import { getAdvertisement } from '../../api/advertisements/ads_api'
+import { getAdvertisement, retrieveSession } from '../../api/advertisements/ads_api'
 import { getRepForProperty } from '../../api/advertisements/bots_api'
 import { saveAdToRedux, saveBotToRedux } from '../../actions/advertisements/ads_actions'
 import { saveSessionIdToRedux } from '../../actions/auth/auth_actions'
@@ -225,24 +225,26 @@ class ConvoUI extends Component {
 			return getRepForProperty(this.state.ad_id)
 		})
 		.then((data) => {
-			return this.props.saveBotToRedux(data)
+			console.log(data)
+			this.props.saveBotToRedux(data)
+			return retrieveSession(identityId, this.state.ad_id, data.bot_id)
 		})
-		.then(() => {
+		.then((data) => {
 			// console.log(this.props.representative)
 			// console.log(this.props.identityId)
 			// console.log('initiateDialogFlow: ', identityId, this.props.representative.bot_id)
-			this.initiateDialogFlow(identityId, this.props.representative.bot_id)
+			this.initiateDialogFlow(data.session_id, identityId, this.props.representative.bot_id)
 		})
 		.catch((err) => {
 			console.log(err)
 		})
 	}
 
-	initiateDialogFlow(identityId, botId) {
+	initiateDialogFlow(session_id, identityId, botId) {
 		// console.log('INITIATING DIALOGFLOW!!!!!')
 		// console.log(identityId)
 		// console.log(this.props.representative.bot_id)
-		const session_id = localStorage.getItem('session_id')
+		// const session_id = localStorage.getItem('session_id')
 		console.log(`Session ID: ${session_id}`)
 		initDialogFlow(session_id, this.state.ad_id, identityId, botId)
 			.then((msg) => {
@@ -264,6 +266,7 @@ class ConvoUI extends Component {
 					messageID: msg.id,
 					loading: false,
 				})
+				console.log('Assigned Session ID: ', msg.session_id)
 				this.props.saveSessionIdToRedux(msg.session_id)
 			}).catch((err) => {
 				console.log(err)

@@ -8,7 +8,7 @@ export const initDialogFlow = (session_id, ad_id, identityId, botId) => {
     axios.post(`${DIALOGFLOW_MS}/init_dialogflow`, { session_id, ad_id, identityId, botId, }, authHeaders())
       .then((data) => {
         console.log(data.data)
-        localStorage.setItem('session_id', data.data.session_id)
+        // localStorage.setItem('session_id', data.data.session_id)
         console.log('session_id', data.data.session_id)
         res(data.data)
       })
