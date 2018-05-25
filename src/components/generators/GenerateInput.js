@@ -42,6 +42,13 @@ class GenerateInput extends Component {
     this.props.showInterest()
   }
 
+  goDown() {
+    this.props.scrollDown()
+    setTimeout(() => {
+      this.props.scrollDown()
+    }, 500)
+  }
+
 	render() {
     const menu_items = [
       `What's the address of the property?`,
@@ -66,7 +73,7 @@ class GenerateInput extends Component {
         <Dropdown overlay={menu} placement='topLeft' trigger={['click']}>
           <Icon
             type='plus'
-            style={{ color: 'lightgray', fontWeight: 'bold', fontSize: '1.2rem', position: 'absolute', left: '50px', zIndex: 20 }}
+            style={{ color: 'lightgray', fontWeight: 'bold', fontSize: '1.2rem', position: 'absolute', left: '50px', zIndex: 40 }}
           />
         </Dropdown>
         <Input
@@ -79,16 +86,16 @@ class GenerateInput extends Component {
           onPressEnter={() => this.submitText()}
           size='large'
           style={comStyles(this.state.input_text.length > 0).inputContainer}
-          onClick={() => this.props.scrollDown()}
+          onClick={() => this.goDown()}
         />
         {
           this.state.input_text.length > 0
           ?
-          <Button type='primary' onClick={() => this.submitText()} style={{ position: 'absolute', right: '50px', borderRadius: '25px' }}>
+          <Button type='primary' onClick={() => this.submitText()} style={{ position: 'absolute', right: '50px', borderRadius: '25px', zIndex: 40 }}>
             SEND
           </Button>
           :
-          <div style={{ color: 'lightgray', position: 'absolute', right: '50px', fontSize: '1.2rem' }}>
+          <div style={{ color: 'lightgray', position: 'absolute', right: '50px', fontSize: '1.2rem', zIndex: 40, }}>
           {
             this.props.showed_interest
             ?
@@ -97,6 +104,7 @@ class GenerateInput extends Component {
             <Icon
               type='heart'
               onClick={() => this.clickedHeart()}
+              style={{ zIndex: 40, }}
             />
           }
           </div>
@@ -169,6 +177,7 @@ const comStyles = (send_button) => {
       borderRadius: '20px',
       border: 'none',
       height: '50px',
+      zIndex: 35,
       ...attrs,
     }
 	}

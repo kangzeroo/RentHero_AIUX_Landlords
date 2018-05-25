@@ -38,11 +38,21 @@ class Questions extends Component {
     })
   }
 
+  // componentDidUpdate() {
+  //   this.scrollDown()
+  //   setTimeout(() => {
+  //     this.scrollDown()
+  //   }, 1000)
+  // }
+
+  componentDidMount() {
+    console.log('SCROLL DOWNB')
+    this.props.scrollDown()
+  }
+
   componentDidUpdate() {
-    this.scrollDown()
-    setTimeout(() => {
-      this.scrollDown()
-    }, 1000)
+    console.log('SCROLL DOWN UPDATED')
+    this.props.scrollDown()
   }
 
   scrollDown() {
