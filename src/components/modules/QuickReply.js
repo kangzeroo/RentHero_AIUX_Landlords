@@ -256,6 +256,7 @@ class QuickReply extends Component {
                 onChange={e => this.setState({ friendlyName: e.target.value })}
                 onPressEnter={() => this.saveFriendlyName()}
                 style={comStyles().prettyInput}
+                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
           </Form>
@@ -289,7 +290,6 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ first_name: e.target.value })}
                 style={comStyles().prettyInput}
-                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -303,7 +303,6 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ last_name: e.target.value })}
                 style={comStyles().prettyInput}
-                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -317,7 +316,6 @@ class QuickReply extends Component {
                 disabled={this.state.saving_contact}
                 onChange={e => this.setState({ phone: e.target.value })}
                 style={comStyles().prettyInput}
-                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item
@@ -332,7 +330,6 @@ class QuickReply extends Component {
                 onChange={e => this.setState({ email: e.target.value })}
                 onPressEnter={() => this.updateContactDetails()}
                 style={comStyles().prettyInput}
-                onClick={() => this.props.scrollDown()}
               />
             </Form.Item>
             <Form.Item style={{ margin: 0 }}>
